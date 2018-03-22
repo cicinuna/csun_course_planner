@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CSUN Computer Science Course Planner - Results</title>
+        <style>
+            p {
+                font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+            }
+            #outer_box {
+                width: 1050px;
+                border: 1px solid black;
+                padding: 5px;
+            }
+            #semester_box {
+                width: 500px;
+                height: 300px;
+                border: 1px solid black;
+                margin: 5px;
+                padding: 5px;
+                display: inline-block;
+                vertical-align: top;
+            }
+            input[type = submit] {
+                width: 100px;
+                height: 30px;
+                border-radius: 5px;
+                padding: 5px;
+                background-color: red;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Your Results</h1>
+        <p>You selected {{units}} total elective units.</p>
+        <div id = "outer_box">
+            {% for course in courses %}
+                <div id = "semester_box">
+                    <h1>Semester</h1>
+                    <p>Required Major Course - 1</p>
+                    <p>Required Major Course - 2</p>
+                    {% for item in course %}
+                        <p>{{item}}</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+        <form action = '/reset' method = 'POST'>
+            {% csrf_token %}
+            <input type = "submit" value = "RESET">
+        </form>
+    </body>
+</html>

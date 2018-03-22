@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CSUN Computer Science Course Planner - Home</title>
+        <style>
+            input {
+                width: 300px;
+                height: 25px;
+                font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Input Student Information</h1>
+        <form action = '/process_user' method = 'POST'>
+            {% csrf_token %}
+            <p><input type="text" name="name" placeholder="Student Name"></p>
+            <p><input type="text" name="desired_years" placeholder="How many years of school?"></p>
+            <p><input type="text" name="desired_units" placeholder="How many units per semester?"></p>
+            <p><input type="submit" value="NEXT"></p>
+        </form>
+    </body>
+</html>

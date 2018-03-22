@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CSUN Computer Science Course Planner - Course Catalog</title>
+        <style>
+            p {
+                font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+            }
+            input[type = submit] {
+                width: 100px;
+                height: 30px;
+                border-radius: 5px;
+                padding: 5px;
+                background-color: green;
+            }
+            #outer_box {
+                width: 1050px;
+                border: 1px solid black;
+                padding: 5px;
+            }
+            #fall_box {
+                width: 500px;
+                border: 1px solid black;
+                padding: 5px;
+                margin: 5px;
+                display: inline-block;
+                vertical-align: top;
+            }
+            #spring_box {
+                width: 500px;
+                border: 1px solid black;
+                padding: 5px;
+                margin: 5px;
+                display: inline-block;
+                vertical-align: top;
+            }
+        </style>
+    </head>
+    <body>
+        <p>Student Name: {{request.session.name}}</p>
+        <p>You want to stay in school for: {{request.session.desired_years}}</p>
+        <p>You want to take {{request.session.desired_units}} units per semester</p>
+        <p>Choose 16 elective courses from the list that add up to 48 units total!</p>
+        <div id = "outer_box">
+            <div id = "fall_box">
+                <h1>Fall Elective Course Catalog</h1>
+                <form action='/process' method='POST'>
+                    {% csrf_token %}
+                    <p>
+                        <input type="checkbox" name='elective' value='COMP 410 - LOGIC PROGRAMMING ( LEC 3 Units )=3'> COMP 410 - LOGIC PROGRAMMING ( LEC 3 Units )</p>
+                    <p>
+                        <input type="checkbox" name='elective' value='COMP 424 - COMP SYSTM SECRTY ( LEC 3 Units )=3'> COMP 424 - COMP SYSTM SECRTY ( LEC 3 Units )</p>
+                    <p>
+                        <input type="checkbox" name='elective' value='COMP 429 - COMP NETWRK SFTWR ( LEC 3 Units )=3'> COMP 429 - COMP NETWRK SFTWR ( LEC 3 Units )</p>
+                    <p>
+                        <input type="checkbox" name='elective' value='COMP 440 - DATABASE DESIGN ( LEC 3 Units )=3'> COMP 440 - DATABASE DESIGN ( LEC 3 Units )</p>
+                    <p>
+                        <input type="checkbox" name='elective' value='COMP 469 - ARTIFICIAL INTELL ( LEC 3 Units )=3'> COMP 469 - ARTIFICIAL INTELL ( LEC 3 Units )</p>
+                    <p>
+                        <input type="checkbox" name='elective' value='COMP 482 - ALGORITHM DESIGN ( LEC 3 Units )=3'> COMP 482 - ALGORITHM DESIGN ( LEC 3 Units )</p>
+                    <p>
+                        <input type="checkbox" name='elective' value='COMP 484 - WEB ENGR I ( LEC 2 Units )=2'> COMP 484 - WEB ENGR I ( LEC 2 Units )</p>
+                    <p>
+                        <input type="checkbox" name='elective' value='COMP 484L - WEB ENGR I LAB ( LAB 1 Unit )=1'> COMP 484L - WEB ENGR I LAB ( LAB 1 Unit )</p>
+                    <p>
+                        <input type="checkbox" name='elective' value='COMP 496ML - MACHINE LEARNING ( LEC 3 Units )=3'> COMP 496ML - MACHINE LEARNING ( LEC 3 Units )</p>
+                    <p>
+                        <input type="checkbox" name='elective' value='COMP 541 - DATA MINING ( SEM 3 Units )=3'> COMP 541 - DATA MINING ( SEM 3 Units )</p>
+                    <p>
+                        <input type="checkbox" name='elective' value='COMP 560 - EXPERT SYSTEMS ( SEM 3 Units )=3'> COMP 560 - EXPERT SYSTEMS ( SEM 3 Units )</p>
+                    <p>
+                        <input type="checkbox" name='elective' value='COMP 565 - ADV COMP GRAPHICS ( SEM 3 Units )=3'> COMP 565 - ADV COMP GRAPHICS ( SEM 3 Units )</p>
+                    <p>
+                        <input type="checkbox" name='elective' value='COMP 583 - SW ENGR MGMT ( LEC 3 Units )=3'> COMP 583 - SW ENGR MGMT ( LEC 3 Units )</p>
+                    <p>
+                        <input type="checkbox" name='elective' value='COMP 584 - ADV WEB ENGR ( SEM 3 Units )=3'> COMP 584 - ADV WEB ENGR ( SEM 3 Units )</p>
+                    <p>
+                        <input type="checkbox" name='elective' value='COMP 585 - GRAPH USRS INTRFC ( SEM 3 Units )=3'> COMP 585 - GRAPH USRS INTRFC ( SEM 3 Units )</p>
+                    <p>
+                        <input type="checkbox" name='elective' value='COMP 589 - SOFTWARE METRICS ( SEM 3 Units )=3'> COMP 589 - SOFTWARE METRICS ( SEM 3 Units )</p>
+                    <p>
+                        <input type="checkbox" name='elective' value='COMP 598EA - EMBEDDED APPS ( SEM 3 Units )=3'> COMP 598EA - EMBEDDED APPS ( SEM 3 Units )</p>
+                    <p>
+                        <input type="checkbox" name='elective' value='COMP 610 - DATA STRCT+ALGOR ( SEM 3 Units )=3'> COMP 610 - DATA STRCT+ALGOR ( SEM 3 Units )</p>
+                    <p>
+                        <input type="checkbox" name='elective' value='COMP 680 - ADV TOPICS SWE ( SEM 3 Units )=3'> COMP 680 - ADV TOPICS SWE ( SEM 3 Units )</p>
+                    <p>
+                        <input type="checkbox" name='elective' value='COMP 696C - DIR GRAD RESEARCH ( SUP 3 Units )=3'> COMP 696C - DIR GRAD RESEARCH ( SUP 3 Units )</p>
+                    <p>
+                        <input type="checkbox" name='elective' value='COMP 698C - THESIS/GRAD PROJ ( SUP 3 Units )=3'> COMP 698C - THESIS/GRAD PROJ ( SUP 3 Units )</p>
+                    <p>
+                        <input type="submit" value="NEXT">
+                    </p>
+                </form>
+            </div>
+        </div>
+    </body>
+    <script>
+        {% if messages %}
+            {% for message in messages %}
+                alert('{{message}}')
+            {% endfor %}
+        {% endif %}
+
+    </script>
+</html>
