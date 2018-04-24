@@ -1,23 +1,56 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>CSUN Computer Science Course Planner - Home</title>
-        <style>
-            input {
-                width: 300px;
-                height: 25px;
-                font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Input Student Information</h1>
-        <form action = '/process_user' method = 'POST'>
-            {% csrf_token %}
-            <p><input type="text" name="name" placeholder="Student Name"></p>
-            <p><input type="text" name="desired_years" placeholder="How many years of school?"></p>
-            <p><input type="text" name="desired_units" placeholder="How many units per semester?"></p>
-            <p><input type="submit" value="NEXT"></p>
-        </form>
-    </body>
+<!doctype html>
+<html lang="en">
+	<head>
+    <!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		{% load static %}
+		<link rel="shortcut icon" href= {% static 'csun_calendar/images/csun.png' %} type="image/png"/>
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ropa+Sans">
+
+		<title>Welcome! CSUN Computer Science Course Planner</title>
+
+		<style>
+			p {
+				font-family: 'Ropa Sans', sans-serif;
+			}
+		</style>
+	</head>
+	<body>
+		<header class="w3-container w3-red"><h1 style = "font-family: 'Ropa Sans', sans-serif">Welcome to CSUN Course Planner</h1></header>
+
+		<div class = "w3-container w3-display-position" style = "top: 100px; left: 50px;">
+			<form class="w3-panel w3-card-4" style = "width: 500px;" action="/register" method = 'POST'>
+				{% csrf_token %}
+				<h2 style = "font-family: 'Ropa Sans', sans-serif">Register</h2>
+				<p><input class="w3-input" type="text" placeholder="First Name" name = "first_name"></p>
+				<p><input class="w3-input" type="text" placeholder="Last Name" name = "last_name"></p>
+				<p><input class="w3-input" type="text" placeholder="Student ID" name = "student_id"></p>
+				<p><input class="w3-input" type="email" placeholder="Email" name = "email"></p>
+				<p><input class="w3-input" type="text" placeholder="Starting Year" name = "starting_year"></p>
+				<p><input class="w3-input" type="password" placeholder="Password" name = "password"></p>
+				<p><input class="w3-input" type="password" placeholder="Confirm Password" name = "password_confirm"></p>
+				<p><input class="w3-btn w3-red" type = "submit" value = "Register"></p>
+			</form>
+		</div>
+		<div class = "w3-container w3-display-position" style = "top: 250px; left: 600px;">
+			<form class="w3-panel w3-card-4" style = "width: 500px;" action="/login" method = 'POST'>
+				{% csrf_token %}
+				<h2 style = "font-family: 'Ropa Sans', sans-serif">Log In</h2>
+				<p><input class="w3-input" type="email" placeholder="Email" name = "email"></p>
+				<p><input class="w3-input" type="password" placeholder="Password" name = "password"></p>
+				<p><input class="w3-btn w3-red" type = "submit" value = "Log In"></p>
+			</form>
+		</div>
+
+	    <script>
+			{% if messages %}
+				{% for message in messages %}
+					alert('{{message}}')
+				{% endfor %}
+			{% endif %}
+		</script>
+	</body>
 </html>

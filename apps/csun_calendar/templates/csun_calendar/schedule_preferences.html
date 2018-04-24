@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+	<head>
+    <!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		{% load static %}
+		<link rel="shortcut icon" href= {% static 'csun_calendar/images/csun.png' %} type="image/png"/>
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ropa+Sans">
+
+		<title>Welcome! CSUN Computer Science Course Planner</title>
+
+		<style>
+			p {
+				font-family: 'Ropa Sans', sans-serif;
+			}
+		</style>
+	</head>
+	<body>
+        <header class="w3-container w3-red"><h1 style = "display: inline-block; font-family: 'Ropa Sans', sans-serif">Create Your Undergrad Schedule</h1>
+            <form style = "margin-top: 20px; float: right; vertical-align: top" action = '/logout'> 
+                <input class = "w3-btn w3-black" type = "submit" value = "Log Out">
+            </form>            
+
+            <form style = "margin-top: 20px; margin-right: 10px; float: right; vertical-align: top" action = '/dashboard'> 
+                <input class = "w3-btn w3-black" type = "submit" value = "Back to Dashboard">
+            </form>
+        </header>
+
+        <div class = "w3-container w3-panel w3-card-4" style = "margin-left: 50px; margin-top: 50px; width: 900px; padding-bottom: 20px;">
+            <h1>Select Your Preferences</h1>
+            <div class = "w3-container" style = "padding-bottom: 10px;">
+                <h3 style = "border-bottom: 2px solid black;">Literature</h3>
+            </div>
+
+            <div class = "w3-container" style = "padding-bottom: 10px;">
+                <h3 style = "border-bottom: 2px solid black;">Language</h3>
+            </div>
+
+            <div class = "w3-container" style = "padding-bottom: 10px;">
+                <h3 style = "border-bottom: 2px solid black;">Sciences</h3>
+            </div>
+
+            <div class = "w3-container" style = "padding-bottom: 10px;">
+                <h3 style = "border-bottom: 2px solid black;">Literature</h3>
+            </div>
+
+            <form action = '/schedule_general'> 
+                <input class = "w3-btn w3-black" type = "submit" value = "Next">
+            </form>
+        </div>
+
+	    <script>
+			{% if messages %}
+				{% for message in messages %}
+					alert('{{message}}')
+				{% endfor %}
+			{% endif %}
+		</script>
+	</body>
+</html>
