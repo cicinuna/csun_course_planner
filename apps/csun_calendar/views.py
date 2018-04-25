@@ -9,6 +9,9 @@ import re
 import bcrypt
 import datetime
 import time
+import requests
+from urllib.request import urlopen
+import json
 
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 PASSWORD_REGEX = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$')
@@ -31,9 +34,51 @@ def get_preferences(request):
         messages.error(request, 'You must be logged in to view this page!')
         return redirect(index)
 
-def get_general_courses(request):
+def get_basic_skills_courses(request):
     if 'user' in request.session:
-        return render(request, 'csun_calendar/schedule_general.html')
+        return render(request, 'csun_calendar/schedule_basic_skills.html')
+    else:
+        messages.error(request, 'You must be logged in to view this page!')
+        return redirect(index)
+
+def get_natural_sciences_courses(request):
+    if 'user' in request.session:
+        return render(request, 'csun_calendar/schedule_natural_sciences.html')
+    else:
+        messages.error(request, 'You must be logged in to view this page!')
+        return redirect(index)
+
+def get_arts_and_humanities_courses(request):
+    if 'user' in request.session:
+        return render(request, 'csun_calendar/schedule_arts_and_humanities.html')
+    else:
+        messages.error(request, 'You must be logged in to view this page!')
+        return redirect(index)
+
+def get_social_sciences_courses(request):
+    if 'user' in request.session:
+        return render(request, 'csun_calendar/schedule_social_sciences.html')
+    else:
+        messages.error(request, 'You must be logged in to view this page!')
+        return redirect(index)
+
+def get_lifelong_learning_courses(request):
+    if 'user' in request.session:
+        return render(request, 'csun_calendar/schedule_lifelong_learning.html')
+    else:
+        messages.error(request, 'You must be logged in to view this page!')
+        return redirect(index)
+
+def get_comparative_cultural_studies_courses(request):
+    if 'user' in request.session:
+        return render(request, 'csun_calendar/schedule_comparative_cultural_studies.html')
+    else:
+        messages.error(request, 'You must be logged in to view this page!')
+        return redirect(index)
+
+def get_us_history_and_government_courses(request):
+    if 'user' in request.session:
+        return render(request, 'csun_calendar/schedule_us_history_and_government.html')
     else:
         messages.error(request, 'You must be logged in to view this page!')
         return redirect(index)
@@ -114,3 +159,19 @@ def logout(request):
         request.session.pop('user')
         messages.success(request, 'Successfully Logged Out!')
     return redirect(index)
+
+def fetch_data(semester, year, subject):
+    url = 'https://api.yelp.com/v3/businesses/search'
+    headers = {
+        'Authorization': 'Bearer {}'.format(API_KEY)
+    }
+
+    url_params = {
+        'term': 'coffee',
+        'location': 'Northridge, CA',
+    }
+
+    r = requests.get(url, headers = headers, params = url_params)
+    content = {
+        'stuff': r.json()
+    }
