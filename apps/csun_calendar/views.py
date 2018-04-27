@@ -41,6 +41,31 @@ def fetch_data(url):
 
     return course_list
 
+def strip_description(courses):
+    for things in courses:
+        try: 
+            desc = things['description']
+            try:
+                pre = re.search(r'Prerequisite.[\w \/]*', desc).group(0)
+            except AttributeError:
+                pre = 'No Prerequisite'
+            try:
+                pres = re.search(r'Prerequisites.[\w \/\;]*', desc).group(0)
+            except AttributeError:
+                pres = 'No Prerequisites'
+            try:
+                core = re.search(r'Corequisite.[\w \/]*', desc).group(0)
+            except AttributeError:
+                core = 'No Corequisite.'
+            try:
+                prep = re.search(r'Preparatory.[\w \/]*', desc).group(0)
+            except AttributeError:
+                prep = 'No Preparatory.'
+        except TypeError:
+            continue
+        things['description'] = pre + ". " + pres + ". " + core + " " + prep
+    return courses
+
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 PASSWORD_REGEX = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$')
 STUDENT_ID_REGEX = re.compile(r'^(\d{9})$')
@@ -180,13 +205,85 @@ russ_data = fetch_data(RUSS_URL)
 span_data = fetch_data(SPAN_URL)
 sped_data = fetch_data(SPED_URL)
 
+strip_description(aas_data)
+strip_description(afrs_data)
+strip_description(cas_data)
+strip_description(chs_data)
+strip_description(engl_data)
+strip_description(ling_data)
+strip_description(qs_data)
+strip_description(coms_data)
+strip_description(phil_data)
+strip_description(rs_data)
+strip_description(math_data)
+strip_description(astr_data)
+strip_description(biol_data)
+strip_description(chem_data)
+strip_description(geog_data)
+strip_description(geol_data)
+strip_description(phys_data)
+strip_description(sci_data)
+strip_description(sust_data)
+strip_description(anth_data)
+strip_description(art_data)
+strip_description(clas_data)
+strip_description(ctva_data)
+strip_description(flit_data)
+strip_description(gws_data)
+strip_description(hist_data)
+strip_description(hum_data)
+strip_description(js_data)
+strip_description(kin_data)
+strip_description(mus_data)
+strip_description(th_data)
+strip_description(ais_data)
+strip_description(cadv_data)
+strip_description(econ_data)
+strip_description(hhd_data)
+strip_description(hsci_data)
+strip_description(mkt_data)
+strip_description(pols_data)
+strip_description(psy_data)
+strip_description(soc_data)
+strip_description(urbs_data)
+strip_description(blaw_data)
+strip_description(bus_data)
+strip_description(cce_data)
+strip_description(cd_data)
+strip_description(cjs_data)
+strip_description(cm_data)
+strip_description(comp_data)
+strip_description(eoh_data)
+strip_description(fcs_data)
+strip_description(fin_data)
+strip_description(jour_data)
+strip_description(mse_data)
+strip_description(rtm_data)
+strip_description(univ_data)
+strip_description(arab_data)
+strip_description(armn_data)
+strip_description(chin_data)
+strip_description(fren_data)
+strip_description(hebr_data)
+strip_description(ital_data)
+strip_description(japn_data)
+strip_description(kor_data)
+strip_description(pers_data)
+strip_description(russ_data)
+strip_description(span_data)
+strip_description(sped_data)
 
 def index(request):
     return render(request, 'csun_calendar/index.html')
 
 def dashboard(request):
     if 'user' in request.session:
-        return render(request, 'csun_calendar/dashboard.html', {"aas_data": aas_data})
+        content = {
+            "aas_data": aas_data,
+            "afrs_data": afrs_data,
+            "cas_data": cas_data
+        }
+        return render(request, 'csun_calendar/dashboard.html', content)
         # {"data": data}
         # {"data": data}
         # {"data": data}
@@ -204,7 +301,20 @@ def get_preferences(request):
 
 def get_basic_skills_courses(request):
     if 'user' in request.session:
-        return render(request, 'csun_calendar/schedule_basic_skills.html')
+        content = {
+            "aas_data": aas_data,
+            "afrs_data": afrs_data,
+            "cas_data": cas_data,
+            "chs_data": chs_data,
+            "engl_data": engl_data,
+            "ling_data": ling_data,
+            "qs_data": qs_data,
+            "coms_data": coms_data,
+            "phil_data": phil_data,
+            "rs_data": rs_data,
+            "math_data": math_data,
+        }
+        return render(request, 'csun_calendar/schedule_basic_skills.html', content)
     else:
         messages.error(request, 'You must be logged in to view this page!')
         return redirect(index)

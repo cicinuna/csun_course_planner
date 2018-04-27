@@ -33,12 +33,9 @@
                 <input class = "w3-btn w3-black" type = "submit" value = "Create Schedule">
             </form>
         </header>
-        {% for item in aas_data %}
-            {% if item.catalog_number == '113B' or item.catalog_number == '114B' or item.catalog_number == '115' %}
-                <p>{{item.subject}} - {{item.catalog_number}} : {{item.title}}  {{item.description}}  {{item.units}}</p>
-            {% endif %}
+        {% for a in aas_data %}
+            <p>{{a.title}} - {{a.description}}</p>
         {% endfor %}
-
         <script>
             {% if messages %}
                 {% for message in messages %}
