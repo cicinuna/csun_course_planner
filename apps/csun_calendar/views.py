@@ -9,7 +9,6 @@ import re
 import bcrypt
 import datetime
 import time
-import requests
 from urllib.request import urlopen
 import json
 
@@ -284,10 +283,6 @@ def dashboard(request):
             "cas_data": cas_data
         }
         return render(request, 'csun_calendar/dashboard.html', content)
-        # {"data": data}
-        # {"data": data}
-        # {"data": data}
-        # 이렇게 보내기
     else:
         messages.error(request, 'You must be logged in to view this page!')
         return redirect(index)
@@ -321,48 +316,199 @@ def get_basic_skills_courses(request):
 
 def get_natural_sciences_courses(request):
     if 'user' in request.session:
-        return render(request, 'csun_calendar/schedule_natural_sciences.html')
+        content = {
+            "astr_data": astr_data,
+            "biol_data": biol_data,
+            "chem_data": chem_data,
+            "geog_data": geog_data,
+            "geol_data": geol_data,
+            "phys_data": phys_data,
+            "sci_data": sci_data,
+            "sust_data": sust_data
+        }
+        return render(request, 'csun_calendar/schedule_natural_sciences.html', content)
     else:
         messages.error(request, 'You must be logged in to view this page!')
         return redirect(index)
 
 def get_arts_and_humanities_courses(request):
     if 'user' in request.session:
-        return render(request, 'csun_calendar/schedule_arts_and_humanities.html')
+        content = {
+            "astr_data": astr_data,
+            "aas_data": aas_data,
+            "anth_data": anth_data,
+            "art_data": art_data,
+            "cas_data": cas_data,
+            "chs_data": chs_data,
+            "clas_data": clas_data,
+            "coms_data": coms_data,
+            "ctva_data": ctva_data,
+            "engl_data": engl_data,
+            "flit_data": flit_data,
+            "gws_data": gws_data,
+            "hist_data": hist_data,
+            "hum_data": hum_data,
+            "js_data": js_data,
+            "kin_data": kin_data,
+            "ling_data": ling_data,
+            "mus_data": mus_data,
+            "phil_data": phil_data,
+            "rs_data": rs_data,
+            "th_data": th_data
+        }
+        return render(request, 'csun_calendar/schedule_arts_and_humanities.html', content)
     else:
         messages.error(request, 'You must be logged in to view this page!')
         return redirect(index)
 
 def get_social_sciences_courses(request):
     if 'user' in request.session:
-        return render(request, 'csun_calendar/schedule_social_sciences.html')
+        content = {
+            "afrs_data": afrs_data,
+            "aas_data": aas_data,
+            "anth_data": anth_data,
+            "ais_data": ais_data,
+            "cadv_data": cadv_data,
+            "chs_data": chs_data,
+            "cas_data": cas_data,
+            "econ_data": econ_data,
+            "geog_data": geog_data,
+            "gws_data": gws_data,
+            "hhd_data": hhd_data,
+            "hist_data": hist_data,
+            "hsci_data": hsci_data,
+            "js_data": js_data,
+            "mkt_data": mkt_data,
+            "pols_data": pols_data,
+            "psy_data": psy_data,
+            "rs_data": rs_data,
+            "soc_data": soc_data,
+            "sust_data": sust_data,
+            "urbs_data": urbs_data,
+        }
+        return render(request, 'csun_calendar/schedule_social_sciences.html', content)
     else:
         messages.error(request, 'You must be logged in to view this page!')
         return redirect(index)
 
 def get_lifelong_learning_courses(request):
     if 'user' in request.session:
-        return render(request, 'csun_calendar/schedule_lifelong_learning.html')
+        content = {
+            "afrs_data": afrs_data,
+            "aas_data": aas_data,
+            "art_data": art_data,
+            "ais_data": ais_data,
+            "biol_data": biol_data,
+            "blaw_data": blaw_data,
+            "bus_data": bus_data,
+            "cadv_data": cadv_data,
+            "cas_daa": cas_data,
+            "cce_data": cce_data,
+            "cd_data": cd_data,
+            "chs_data": chs_data,
+            "cjs_data": cjs_data,
+            "cm_data": cm_data,
+            "comp_data": comp_data,
+            "coms_data": coms_data,
+            "ctva_data": ctva_data,
+            "engl_data": engl_data,
+            "eoh_data": eoh_data,
+            "fcs_data": fcs_data,
+            "fin_data": fin_data,
+            "flit_data": flit_data,
+            "geog_data": geog_data,
+            "geol_data": geol_data,
+            "gws_data": gws_data,
+            "hist_data": hist_data,
+            "hsci_data": hsci_data,
+            "jour_data": jour_data,
+            "js_data": js_data,
+            "kin_data": kin_data,
+            "ling_data": ling_data,
+            "mse_data": mse_data,
+            "phil": phil_data,
+            "qs_data": qs_data,
+            "rtm_data": rtm_data,
+            "sci_data": sci_data,
+            "sust_data": sust_data,
+            "univ_data": univ_data,
+        }
+        return render(request, 'csun_calendar/schedule_lifelong_learning.html', content)
     else:
         messages.error(request, 'You must be logged in to view this page!')
         return redirect(index)
 
 def get_comparative_cultural_studies_courses(request):
     if 'user' in request.session:
-        return render(request, 'csun_calendar/schedule_comparative_cultural_studies.html')
+        content = {
+            "aas_data": aas_data,
+            "afrs_data": afrs_data,
+            "ais_data": ais_data,
+            "anth_data": anth_data,
+            "arab_data": arab_data,
+            "armn_data": armn_data,
+            "art_data": art_data,
+            "blaw_data": blaw_data,
+            "cas_data": cas_data,
+            "chin_data": chin_data,
+            "chs_data": chs_data,
+            "clas_data": clas_data,
+            "coms_data": coms_data,
+            "engl_data": engl_data,
+            "flit_data": flit_data,
+            "fren_data": fren_data,
+            "geog_data": geog_data,
+            "gws_data": gws_data,
+            "hebr_data": hebr_data,
+            "hist_data": hist_data,
+            "ital_data": ital_data,
+            "japn_data": japn_data,
+            "jour_data": jour_data,
+            "js_data": js_data,
+            "kin_data": kin_data,
+            "kor_data": kor_data,
+            "ling_data": ling_data,
+            "mse_data": mse_data,
+            "mus_data": mus_data,
+            "pers_data": pers_data,
+            "phil_data": phil_data,
+            "pols_data": pols_data,
+            "qs_data": qs_data,
+            "rs_data": rs_data,
+            "rtm_data": rtm_data,
+            "russ_data": russ_data,
+            "soc_data": soc_data,
+            "span_data": span_data,
+            "sped_data": sped_data,
+            "th_data": th_data,
+            "urbs_data": urbs_data,
+        }
+        return render(request, 'csun_calendar/schedule_comparative_cultural_studies.html', content)
     else:
         messages.error(request, 'You must be logged in to view this page!')
         return redirect(index)
 
 def get_us_history_and_government_courses(request):
     if 'user' in request.session:
-        return render(request, 'csun_calendar/schedule_us_history_and_government.html')
+        content = {
+            "aas_data": aas_data,
+            "afrs_data": afrs_data,
+            "chs_data": chs_data,
+            "econ_data": econ_data,
+            "hist_data": hist_data,
+            "pols_data": pols_data,
+            "rs_data": rs_data,
+        }
+        return render(request, 'csun_calendar/schedule_us_history_and_government.html', content)
     else:
         messages.error(request, 'You must be logged in to view this page!')
         return redirect(index)
 
 def gpa(request):
     pass
+
+def schedule_semesters(request):
+    return render(request, 'csun_calendar/schedule_semesters.html')
 
 def process_registration(request):
     error = False

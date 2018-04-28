@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^schedule_lifelong_learning$', views.get_lifelong_learning_courses),
     url(r'^schedule_comparative_cultural_studies$', views.get_comparative_cultural_studies_courses),
     url(r'^schedule_us_history_and_government$', views.get_us_history_and_government_courses),
+    url(r'^schedule_semesters$', views.schedule_semesters),
     url(r'^gpa$', views.gpa),
     url(r'^logout$', views.logout),
     url(r'^login$', views.process_login),

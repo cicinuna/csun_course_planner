@@ -6,8 +6,10 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		{% load static %}
 		<link rel="shortcut icon" href= {% static 'csun_calendar/images/csun.png' %} type="image/png"/>
-		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ropa+Sans">
 
 		<title>Welcome! CSUN Computer Science Course Planner</title>
@@ -16,6 +18,67 @@
 			p {
 				font-family: 'Ropa Sans', sans-serif;
 			}
+            [data-tooltip] {
+                position: relative;
+                z-index: 2;
+                cursor: pointer;
+            }
+
+            /* Hide the tooltip content by default */
+            [data-tooltip]:before,
+            [data-tooltip]:after {
+                visibility: hidden;
+                -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+                filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            /* Position tooltip above the element */
+            [data-tooltip]:before {
+                position: absolute;
+                bottom: 150%;
+                left: 50%;
+                margin-bottom: 5px;
+                margin-left: -80px;
+                padding: 7px;
+                width: 160px;
+                -webkit-border-radius: 3px;
+                -moz-border-radius: 3px;
+                border-radius: 3px;
+                background-color: #000;
+                background-color: hsla(0, 0%, 20%, 0.9);
+                color: #fff;
+                content: attr(data-tooltip);
+                text-align: center;
+                font-size: 14px;
+                line-height: 1.2;
+            }
+
+            /* Triangle hack to make tooltip look like a speech bubble */
+            [data-tooltip]:after {
+                position: absolute;
+                bottom: 150%;
+                left: 50%;
+                margin-left: -5px;
+                width: 0;
+                border-top: 5px solid #000;
+                border-top: 5px solid hsla(0, 0%, 20%, 0.9);
+                border-right: 5px solid transparent;
+                border-left: 5px solid transparent;
+                content: " ";
+                font-size: 0;
+                line-height: 0;
+            }
+
+            /* Show tooltip content on hover */
+            [data-tooltip]:hover:before,
+            [data-tooltip]:hover:after {
+                visibility: visible;
+                -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+                filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
+                opacity: 1;
+            }
 		</style>
 	</head>
 	<body>
@@ -30,15 +93,221 @@
         </header>
 
         <div class = "w3-container">
-            <form action = '/schedule_us_history_and_government'>
+            <form id = "basic_skills" action = '/schedule_us_history_and_government'> 
                 <div class = "w3-container w3-panel w3-card-4" style = "margin-left: 50px; margin-top: 50px; width: 900px; padding-bottom: 20px;">
-                    <h1>Comparative Cultural Studies - 6 Units</h1>
-                    <h4>Gender, Race, Class, Ethnicity, Foreign Languages</h4>
-                    <div class = "w3-container" style = "padding-bottom: 10px;">
-                        <h3 style = "border-bottom: 2px solid black;">Comparative Cultural Studies</h3>
-					</div>
-					<input class = "w3-btn w3-black" style = "float: right;" type = "submit" value = "Next">
+                    <h1 style = "border-bottom: 2px solid black;">Comparative Cultural Studies - 6 Units</h1>
+                    <button style = "display: block; margin-bottom: 10px;" type="button" class="btn btn-danger" data-toggle="collapse" data-target="#Comparative_Cultural_Studies">Comparative Cultural Studies</button>
+                    <div id = "Comparative_Cultural_Studies" class = "w3-container collapse" style = "padding-bottom: 10px;">
+                        {% for c in aas_data %}
+                            {% if c.catalog_number == '100' or c.catalog_number == '340' or c.catalog_number == '345' or c.catalog_number == '360' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in afrs_data %}
+                            {% if c.catalog_number == '100' or c.catalog_number == '165' or c.catalog_number == '226' or c.catalog_number == '300' or c.catalog_number == '320' or c.catalog_number == '322' or c.catalog_number == '324' or c.catalog_number == '325' or c.catalog_number == '366' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in ais_data %}
+                            {% if c.catalog_number == '101' or c.catalog_number == '304' or c.catalog_number == '333' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in anth_data %}
+                            {% if c.catalog_number == '108' or c.catalog_number == '308' or c.catalog_number == '310' or c.catalog_number == '315' or c.catalog_number == '345' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in arab_data %}
+                            {% if c.catalog_number == '101' or c.catalog_number == '102' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in armn_data %}
+                            {% if c.catalog_number == '101' or c.catalog_number == '102' or c.catalog_number == '310' or c.catalog_number == '360' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in art_data %}
+                            {% if c.catalog_number == '112' or c.catalog_number == '315' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}                        
+                        {% for c in blaw_data %}
+                            {% if c.catalog_number == '391' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in cas_data %}
+                            {% if c.catalog_number == '100' or c.catalog_number == '102' or c.catalog_number == '311' or c.catalog_number == '365' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in chin_data %}
+                            {% if c.catalog_number == '101' or c.catalog_number == '102' or c.catalog_number == '201' or c.catalog_number == '202' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in chs_data %}
+                            {% if c.catalog_number == '100' or c.catalog_number == '101' or c.catalog_number == '102' or c.catalog_number == '246' or c.catalog_number == '333' or c.catalog_number == '364' or c.catalog_number == '365' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in clas_data %}
+                            {% if c.catalog_number == '101' or c.catalog_number == '101L' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in coms_data %}
+                            {% if c.catalog_number == '356' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in engl_data %}
+                            {% if c.catalog_number == '311' or c.catalog_number == '371' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in flit_data %}
+                            {% if c.catalog_number == '150' or c.catalog_number == '370' or c.catalog_number == '371' or c.catalog_number == '380' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in fren_data %}
+                            {% if c.catalog_number == '200' or c.catalog_number == '204' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in geog_data %}
+                            {% if c.catalog_number == '318' or c.catalog_number == '322' or c.catalog_number == '324' or c.catalog_number == '326' or c.catalog_number == '334' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in gws_data %}
+                            {% if c.catalog_number == '100' or c.catalog_number == '110' or c.catalog_number == '300' or c.catalog_number == '351' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in hebr_data %}
+                            {% if c.catalog_number == '101' or c.catalog_number == '102' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in hist_data %}
+                            {% if c.catalog_number == '161' or c.catalog_number == '185' or c.catalog_number == '192' or c.catalog_number == '210' or c.catalog_number == '349A' or c.catalog_number == '349B' or c.catalog_number == '369' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in ital_data %}
+                            {% if c.catalog_number == '101' or c.catalog_number == '102' or c.catalog_number == '201' or c.catalog_number == '202' or c.catalog_number == '204' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in japn_data %}
+                            {% if c.catalog_number == '101' or c.catalog_number == '202' or c.catalog_number == '204' or c.catalog_number == '205' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in jour_data %}
+                            {% if c.catalog_number == '371' or c.catalog_number == '372' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in js_data %}
+                            {% if c.catalog_number == '210' or c.catalog_number == '330' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in kin_data %}
+                            {% if c.catalog_number == '385' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in kor_data %}
+                            {% if c.catalog_number == '101' or c.catalog_number == '102' or c.catalog_number == '201' or c.catalog_number == '202' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in ling_data %}
+                            {% if c.catalog_number == '250' or c.catalog_number == '325' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in mse_data %}
+                            {% if c.catalog_number == '302' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in mus_data %}
+                            {% if c.catalog_number == '309' or c.catalog_number == '310' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in pers_data %}
+                            {% if c.catalog_number == '101' or c.catalog_number == '102' or c.catalog_number == '201' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in phil_data %}
+                            {% if c.catalog_number == '333' or c.catalog_number == '343' or c.catalog_number == '344' or c.catalog_number == '348' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in pols_data %}
+                            {% if c.catalog_number == '197' or c.catalog_number == '321' or c.catalog_number == '332' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in qs_data %}
+                            {% if c.catalog_number == '301' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in rs_data %}
+                            {% if c.catalog_number == '150' or c.catalog_number == '306' or c.catalog_number == '365' or c.catalog_number == '378' or c.catalog_number == '380' or c.catalog_number == '385' or c.catalog_number == '390' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in rtm_data %}
+                            {% if c.catalog_number == '330' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in russ_data %}
+                            {% if c.catalog_number == '101' or c.catalog_number == '102' or c.catalog_number == '200' or c.catalog_number == '201' or c.catalog_number == '202' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in soc_data %}
+                            {% if c.catalog_number == '306' or c.catalog_number == '307' or c.catalog_number == '333' or c.catalog_number == '335' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in span_data %}
+                            {% if c.catalog_number == '101' or c.catalog_number == '102' or c.catalog_number == '103' or c.catalog_number == '210' or c.catalog_number == '220A' or c.catalog_number == '220B' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in sped_data %}
+                            {% if c.catalog_number == '200SL' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in th_data %}
+                            {% if c.catalog_number == '325' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in urbs_data %}
+                            {% if c.catalog_number == '350' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    <input id = "next" class = "w3-btn w3-black" style = "float: right;" type = "submit" value = "Next">
                 </div>
+
             </form>
         </div>
 
@@ -48,6 +317,37 @@
 					alert('{{message}}')
 				{% endfor %}
 			{% endif %}
-		</script>
+        </script>
+        
+        <script>
+            $(document).ready(function() {
+                $("#next").attr('disabled', 'disabled');
+                $('.w3-check').click(function() {
+                    var sum = 0;
+                    $('.w3-check:checked').each(function() {
+                        if(sum < 6) {
+                            $('.w3-check:not(:checked)').each(function() {
+                                $(this).removeAttr('disabled');
+                                $("#next").attr('disabled', 'disabled');
+                            });
+                        };
+                        sum += parseInt($(this).data("units"));
+                        if(sum == 6) {
+                            $('.w3-check:not(:checked)').each(function() {
+                                $("#next").removeAttr('disabled');
+                            });
+                        };
+                        if(sum > 12) {
+                            alert('Maybe you chose too many from this GE section...');
+                            $("#next").attr('disabled', 'disabled');
+                        };
+                    }).change(function() {
+                        sum -= parseInt($(this).data("units"));
+                    });
+                    console.log(sum);
+                });
+            });
+        </script>
 	</body>
 </html>
+

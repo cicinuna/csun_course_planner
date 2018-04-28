@@ -6,8 +6,10 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		{% load static %}
 		<link rel="shortcut icon" href= {% static 'csun_calendar/images/csun.png' %} type="image/png"/>
-		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ropa+Sans">
 
 		<title>Welcome! CSUN Computer Science Course Planner</title>
@@ -16,6 +18,67 @@
 			p {
 				font-family: 'Ropa Sans', sans-serif;
 			}
+            [data-tooltip] {
+                position: relative;
+                z-index: 2;
+                cursor: pointer;
+            }
+
+            /* Hide the tooltip content by default */
+            [data-tooltip]:before,
+            [data-tooltip]:after {
+                visibility: hidden;
+                -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+                filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            /* Position tooltip above the element */
+            [data-tooltip]:before {
+                position: absolute;
+                bottom: 150%;
+                left: 50%;
+                margin-bottom: 5px;
+                margin-left: -80px;
+                padding: 7px;
+                width: 160px;
+                -webkit-border-radius: 3px;
+                -moz-border-radius: 3px;
+                border-radius: 3px;
+                background-color: #000;
+                background-color: hsla(0, 0%, 20%, 0.9);
+                color: #fff;
+                content: attr(data-tooltip);
+                text-align: center;
+                font-size: 14px;
+                line-height: 1.2;
+            }
+
+            /* Triangle hack to make tooltip look like a speech bubble */
+            [data-tooltip]:after {
+                position: absolute;
+                bottom: 150%;
+                left: 50%;
+                margin-left: -5px;
+                width: 0;
+                border-top: 5px solid #000;
+                border-top: 5px solid hsla(0, 0%, 20%, 0.9);
+                border-right: 5px solid transparent;
+                border-left: 5px solid transparent;
+                content: " ";
+                font-size: 0;
+                line-height: 0;
+            }
+
+            /* Show tooltip content on hover */
+            [data-tooltip]:hover:before,
+            [data-tooltip]:hover:after {
+                visibility: visible;
+                -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+                filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
+                opacity: 1;
+            }
 		</style>
 	</head>
 	<body>
@@ -30,26 +93,83 @@
         </header>
 
         <div class = "w3-container">
-            <form action = '/schedule_combine'>
+            <form id = "basic_skills" action = '/schedule_semesters'> 
                 <div class = "w3-container w3-panel w3-card-4" style = "margin-left: 50px; margin-top: 50px; width: 900px; padding-bottom: 20px;">
-                    <h1>U.S. History and Government - 6 Units</h1>
-                    <div class = "w3-container" style = "padding-bottom: 10px;">
-                        <h3 style = "border-bottom: 2px solid black;">American History, Institutions and Ideals</h3>
+                    <h1 style = "border-bottom: 2px solid black;">U.S. History and Government - 6 Units</h1>
+                    <button style = "display: block; margin-bottom: 10px;" type="button" class="btn btn-danger" data-toggle="collapse" data-target="#American_History">American History, Institutions and Ideals</button>
+                    <div id = "American_History" class = "w3-container collapse" style = "padding-bottom: 10px;">
+                        {% for c in afrs_data %}
+                            {% if c.catalog_number == '271' or c.catalog_number == '272' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in chs_data %}
+                            {% if c.catalog_number == '245' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in econ_data %}
+                            {% if c.catalog_number == '175' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in hist_data %}
+                            {% if c.catalog_number == '270' or c.catalog_number == '271' or c.catalog_number == '370' or c.catalog_number == '371' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+        
+                    <button style = "display: block; margin-bottom: 10px;"  type="button" class="btn btn-danger" data-toggle="collapse" data-target="#Constitution">Constitution of the United States</button>
+                    <div id = "Constitution" class = "w3-container collapse" style = "padding-bottom: 10px;">
+                        {% for c in aas_data %}
+                            {% if c.catalog_number == '347' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in afrs_data %}
+                            {% if c.catalog_number == '161' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in chs_data %}
+                            {% if c.catalog_number == '260' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in pols_data %}
+                            {% if c.catalog_number == '155' or c.catalog_number == '355' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                        {% for c in rs_data %}
+                            {% if c.catalog_number == '255' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+        
+                    <button style = "display: block; margin-bottom: 10px;"  type="button" class="btn btn-danger" data-toggle="collapse" data-target="#State">State and Local Government</button>
+                    <div id = "State" class = "w3-container collapse" style = "padding-bottom: 10px;">
+                        {% for c in pols_data %}
+                            {% if c.catalog_number == '403' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
                     </div>
 
-                    <div class = "w3-container" style = "padding-bottom: 10px;">
-                        <h3 style = "border-bottom: 2px solid black;">Constitution of the United States</h3>
+                    <button style = "display: block; margin-bottom: 10px;"  type="button" class="btn btn-danger" data-toggle="collapse" data-target="#California">California State and Local Government</button>
+                    <div id = "California" class = "w3-container collapse" style = "padding-bottom: 10px;">
+                        {% for c in pols_data %}
+                            {% if c.catalog_number == '490CA' %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% endif %}
+                        {% endfor %}
                     </div>
 
-                    <div class = "w3-container" style = "padding-bottom: 10px;">
-                        <h3 style = "border-bottom: 2px solid black;">State and Local Government</h3>
-                    </div>
-
-                    <div class = "w3-container" style = "padding-bottom: 10px;">
-                        <h3 style = "border-bottom: 2px solid black;">California State and Local Government</h3>
-                    </div>
-                    <input class = "w3-btn w3-black" style = "float: right;" type = "submit" value = "Next">
+                    <input id = "next" class = "w3-btn w3-black" style = "float: right;" type = "submit" value = "Next">
                 </div>
+
             </form>
         </div>
 
@@ -59,6 +179,36 @@
 					alert('{{message}}')
 				{% endfor %}
 			{% endif %}
-		</script>
+        </script>
+        
+        <script>
+            $(document).ready(function() {
+                $("#next").attr('disabled', 'disabled');
+                $('.w3-check').click(function() {
+                    var sum = 0;
+                    $('.w3-check:checked').each(function() {
+                        if(sum < 6) {
+                            $('.w3-check:not(:checked)').each(function() {
+                                $(this).removeAttr('disabled');
+                                $("#next").attr('disabled', 'disabled');
+                            });
+                        };
+                        sum += parseInt($(this).data("units"));
+                        if(sum == 6) {
+                            $('.w3-check:not(:checked)').each(function() {
+                                $("#next").removeAttr('disabled');
+                            });
+                        };
+                        if(sum > 12) {
+                            alert('Maybe you chose too many from this GE section...');
+                            $("#next").attr('disabled', 'disabled');
+                        };
+                    }).change(function() {
+                        sum -= parseInt($(this).data("units"));
+                    });
+                    console.log(sum);
+                });
+            });
+        </script>
 	</body>
 </html>
