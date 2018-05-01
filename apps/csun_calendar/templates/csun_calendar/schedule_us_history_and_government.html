@@ -93,29 +93,54 @@
         </header>
 
         <div class = "w3-container">
-            <form id = "basic_skills" action = '/schedule_semesters'> 
+            <form id = "basic_skills" action = '/schedule_semesters' method = 'POST'>
+                {% csrf_token %} 
                 <div class = "w3-container w3-panel w3-card-4" style = "margin-left: 50px; margin-top: 50px; width: 900px; padding-bottom: 20px;">
                     <h1 style = "border-bottom: 2px solid black;">U.S. History and Government - 6 Units</h1>
                     <button style = "display: block; margin-bottom: 10px;" type="button" class="btn btn-danger" data-toggle="collapse" data-target="#American_History">American History, Institutions and Ideals</button>
                     <div id = "American_History" class = "w3-container collapse" style = "padding-bottom: 10px;">
                         {% for c in afrs_data %}
-                            {% if c.catalog_number == '271' or c.catalog_number == '272' %}
-                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% if c.subject in request.session.user.ge_prefs %}
+                                {% if c.catalog_number == '271' or c.catalog_number == '272' %}
+                                    <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units. <span class = 'w3-text-red'>** Recommended! **</span></p><br>
+                                {% endif %}
+                            {% else %}
+                                {% if c.catalog_number == '271' or c.catalog_number == '272' %}
+                                    <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units. </p><br>
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
                         {% for c in chs_data %}
-                            {% if c.catalog_number == '245' %}
-                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% if c.subject in request.session.user.ge_prefs %}
+                                {% if c.catalog_number == '245' %}
+                                    <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units. <span class = 'w3-text-red'>** Recommended! **</span></p><br>
+                                {% endif %}
+                            {% else %}
+                                {% if c.catalog_number == '245' %}
+                                    <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units. </p><br>
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
                         {% for c in econ_data %}
-                            {% if c.catalog_number == '175' %}
-                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% if c.subject in request.session.user.ge_prefs %}
+                                {% if c.catalog_number == '175' %}
+                                    <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units. <span class = 'w3-text-red'>** Recommended! **</span></p><br>
+                                {% endif %}
+                            {% else %}
+                                {% if c.catalog_number == '175' %}
+                                    <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units. </p><br>
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
                         {% for c in hist_data %}
-                            {% if c.catalog_number == '270' or c.catalog_number == '271' or c.catalog_number == '370' or c.catalog_number == '371' %}
-                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% if c.subject in request.session.user.ge_prefs %}
+                                {% if c.catalog_number == '270' or c.catalog_number == '271' or c.catalog_number == '370' or c.catalog_number == '371' %}
+                                    <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units. <span class = 'w3-text-red'>** Recommended! **</span></p><br>
+                                {% endif %}
+                            {% else %}
+                                {% if c.catalog_number == '270' or c.catalog_number == '271' or c.catalog_number == '370' or c.catalog_number == '371' %}
+                                    <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units. </p><br>
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
                     </div>
@@ -123,28 +148,58 @@
                     <button style = "display: block; margin-bottom: 10px;"  type="button" class="btn btn-danger" data-toggle="collapse" data-target="#Constitution">Constitution of the United States</button>
                     <div id = "Constitution" class = "w3-container collapse" style = "padding-bottom: 10px;">
                         {% for c in aas_data %}
-                            {% if c.catalog_number == '347' %}
-                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% if c.subject in request.session.user.ge_prefs %}
+                                {% if c.catalog_number == '347' %}
+                                    <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units. <span class = 'w3-text-red'>** Recommended! **</span></p><br>
+                                {% endif %}
+                            {% else %}
+                                {% if c.catalog_number == '347' %}
+                                    <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units. </p><br>
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
                         {% for c in afrs_data %}
-                            {% if c.catalog_number == '161' %}
-                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% if c.subject in request.session.user.ge_prefs %}
+                                {% if c.catalog_number == '161' %}
+                                    <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units. <span class = 'w3-text-red'>** Recommended! **</span></p><br>
+                                {% endif %}
+                            {% else %}
+                                {% if c.catalog_number == '161' %}
+                                    <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units. </p><br>
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
                         {% for c in chs_data %}
-                            {% if c.catalog_number == '260' %}
-                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% if c.subject in request.session.user.ge_prefs %}
+                                {% if c.catalog_number == '260' %}
+                                    <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units. <span class = 'w3-text-red'>** Recommended! **</span></p><br>
+                                {% endif %}
+                            {% else %}
+                                {% if c.catalog_number == '260' %}
+                                    <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units. </p><br>
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
                         {% for c in pols_data %}
-                            {% if c.catalog_number == '155' or c.catalog_number == '355' %}
-                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% if c.subject in request.session.user.ge_prefs %}
+                                {% if c.catalog_number == '155' or c.catalog_number == '355' %}
+                                    <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units. <span class = 'w3-text-red'>** Recommended! **</span></p><br>
+                                {% endif %}
+                            {% else %}
+                                {% if c.catalog_number == '155' or c.catalog_number == '355' %}
+                                    <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units. </p><br>
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
                         {% for c in rs_data %}
-                            {% if c.catalog_number == '255' %}
-                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% if c.subject in request.session.user.ge_prefs %}
+                                {% if c.catalog_number == '255' %}
+                                    <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units. <span class = 'w3-text-red'>** Recommended! **</span></p><br>
+                                {% endif %}
+                            {% else %}
+                                {% if c.catalog_number == '255' %}
+                                    <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units. </p><br>
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
                     </div>
@@ -152,8 +207,14 @@
                     <button style = "display: block; margin-bottom: 10px;"  type="button" class="btn btn-danger" data-toggle="collapse" data-target="#State">State and Local Government</button>
                     <div id = "State" class = "w3-container collapse" style = "padding-bottom: 10px;">
                         {% for c in pols_data %}
-                            {% if c.catalog_number == '403' %}
-                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% if c.subject in request.session.user.ge_prefs %}
+                                {% if c.catalog_number == '403' %}
+                                    <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units. <span class = 'w3-text-red'>** Recommended! **</span></p><br>
+                                {% endif %}
+                            {% else %}
+                                {% if c.catalog_number == '403' %}
+                                    <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units. </p><br>
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
                     </div>
@@ -161,8 +222,14 @@
                     <button style = "display: block; margin-bottom: 10px;"  type="button" class="btn btn-danger" data-toggle="collapse" data-target="#California">California State and Local Government</button>
                     <div id = "California" class = "w3-container collapse" style = "padding-bottom: 10px;">
                         {% for c in pols_data %}
-                            {% if c.catalog_number == '490CA' %}
-                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c.subject}}+ ' ' +{{c.catalog_number}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units.</p><br>
+                            {% if c.subject in request.session.user.ge_prefs %}
+                                {% if c.catalog_number == '490CA' %}
+                                    <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units. <span class = 'w3-text-red'>** Recommended! **</span></p><br>
+                                {% endif %}
+                            {% else %}
+                                {% if c.catalog_number == '490CA' %}
+                                    <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_list" value = "{{c}}" data-units = '{{c.units}}'><p style = "display: inline-block;" data-tooltip = "{{c.description}}" >{{c.subject}} {{c.catalog_number}} - {{c.title}}. {{c.units}} Units. </p><br>
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
                     </div>

@@ -6,8 +6,10 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		{% load static %}
 		<link rel="shortcut icon" href= {% static 'csun_calendar/images/csun.png' %} type="image/png"/>
-		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ropa+Sans">
 
 		<title>Welcome! CSUN Computer Science Course Planner</title>
@@ -16,6 +18,67 @@
 			p {
 				font-family: 'Ropa Sans', sans-serif;
 			}
+            [data-tooltip] {
+                position: relative;
+                z-index: 2;
+                cursor: pointer;
+            }
+
+            /* Hide the tooltip content by default */
+            [data-tooltip]:before,
+            [data-tooltip]:after {
+                visibility: hidden;
+                -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+                filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            /* Position tooltip above the element */
+            [data-tooltip]:before {
+                position: absolute;
+                bottom: 150%;
+                left: 50%;
+                margin-bottom: 5px;
+                margin-left: -80px;
+                padding: 7px;
+                width: 160px;
+                -webkit-border-radius: 3px;
+                -moz-border-radius: 3px;
+                border-radius: 3px;
+                background-color: #000;
+                background-color: hsla(0, 0%, 20%, 0.9);
+                color: #fff;
+                content: attr(data-tooltip);
+                text-align: center;
+                font-size: 14px;
+                line-height: 1.2;
+            }
+
+            /* Triangle hack to make tooltip look like a speech bubble */
+            [data-tooltip]:after {
+                position: absolute;
+                bottom: 150%;
+                left: 50%;
+                margin-left: -5px;
+                width: 0;
+                border-top: 5px solid #000;
+                border-top: 5px solid hsla(0, 0%, 20%, 0.9);
+                border-right: 5px solid transparent;
+                border-left: 5px solid transparent;
+                content: " ";
+                font-size: 0;
+                line-height: 0;
+            }
+
+            /* Show tooltip content on hover */
+            [data-tooltip]:hover:before,
+            [data-tooltip]:hover:after {
+                visibility: visible;
+                -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+                filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
+                opacity: 1;
+            }
 		</style>
 	</head>
 	<body>
@@ -29,26 +92,72 @@
             </form>
         </header>
 
-        <div class = "w3-container w3-panel w3-card-4" style = "margin-left: 50px; margin-top: 50px; width: 900px; padding-bottom: 20px;">
-            <h1>Select Your Preferences</h1>
-            <div class = "w3-container" style = "padding-bottom: 10px;">
-                <h3 style = "border-bottom: 2px solid black;">Literature</h3>
-            </div>
+        <div class = "w3-container">
+            <form id = "basic_skills" action = '/schedule_basic_skills' method = 'POST'>
+                {% csrf_token %}
+                <div class = "w3-container w3-panel w3-card-4" style = "margin-left: 50px; margin-top: 50px; width: 900px; padding-bottom: 20px;">
+                    <h1 style = "border-bottom: 2px solid black;">Select Your Preferences</h1>
+                    <button style = "display: block; margin-bottom: 10px;" type="button" class="btn btn-danger" data-toggle="collapse" data-target="#Business_and_Economics">Business and Economics</button>
+                    <div id = "Business_and_Economics" class = "w3-container collapse" style = "padding-bottom: 10px;">
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "BLAW"><p style = "display: inline-block;">Business Law</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "ECON"><p style = "display: inline-block;">Economics</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "FIN"><p style = "display: inline-block;">Finance, Real Estate and Insurance</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "MKT"><p style = "display: inline-block;">Marketing</p><br>
+                    </div>
+    
+                    <button style = "display: block; margin-bottom: 10px;"  type="button" class="btn btn-danger" data-toggle="collapse" data-target="#Health_and_Human_Development">Health and Human Development</button>
+                    <div id = "Health_and_Human_Development" class = "w3-container collapse" style = "padding-bottom: 10px;">
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "COMS"><p style = "display: inline-block;">Communication Disorders and Sciences</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "EOH"><p style = "display: inline-block;">Environmental and Occupational Health</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "FCS"><p style = "display: inline-block;">Family and Consumer Sciences</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "HSCI"><p style = "display: inline-block;">Health Sciences</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "KIN"><p style = "display: inline-block;">Kinesiology</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "RTM"><p style = "display: inline-block;">Recreation and Tourism Management</p><br>
+                    </div>
 
-            <div class = "w3-container" style = "padding-bottom: 10px;">
-                <h3 style = "border-bottom: 2px solid black;">Language</h3>
-            </div>
+                    <button style = "display: block; margin-bottom: 10px;"  type="button" class="btn btn-danger" data-toggle="collapse" data-target="#Arts_Media_Communication">Arts, Media, and Communications</button>
+                    <div id = "Arts_Media_Communication" class = "w3-container collapse" style = "padding-bottom: 10px;">
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "ART"><p style = "display: inline-block;">Art</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "JOUR"><p style = "display: inline-block;">Journalism</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "MUS"><p style = "display: inline-block;">Music</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "TH"><p style = "display: inline-block;">Theatre</p><br>
+                    </div>
 
-            <div class = "w3-container" style = "padding-bottom: 10px;">
-                <h3 style = "border-bottom: 2px solid black;">Sciences</h3>
-            </div>
+                    <button style = "display: block; margin-bottom: 10px;"  type="button" class="btn btn-danger" data-toggle="collapse" data-target="#Science_and_Mathematics">Science and Mathematics</button>
+                    <div id = "Science_and_Mathematics" class = "w3-container collapse" style = "padding-bottom: 10px;">
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "BIOL"><p style = "display: inline-block;">Biology</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "CHEM"><p style = "display: inline-block;">Chemistry and Biochemistry</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "GEOL"><p style = "display: inline-block;">Geological Sciences</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "MATH"><p style = "display: inline-block;">Mathematics</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "PHYS"><p style = "display: inline-block;">Physics and Astronomy</p><br>
+                    </div>
 
-            <div class = "w3-container" style = "padding-bottom: 10px;">
-                <h3 style = "border-bottom: 2px solid black;">Literature</h3>
-            </div>
+                    <button style = "display: block; margin-bottom: 10px;"  type="button" class="btn btn-danger" data-toggle="collapse" data-target="#Humanities">Humanities</button>
+                    <div id = "Humanities" class = "w3-container collapse" style = "padding-bottom: 10px;">
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "AAS"><p style = "display: inline-block;">Asian American Studies</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "CHS"><p style = "display: inline-block;">Chicano Studies</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "ENGL"><p style = "display: inline-block;">English</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "GWS"><p style = "display: inline-block;">Gender and Women Studies</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "LING"><p style = "display: inline-block;">Linguistics</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "FLIT"><p style = "display: inline-block;">Modern and Classical Lnaguages and Literatures</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "PHIL"><p style = "display: inline-block;">Philosophy</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "RS"><p style = "display: inline-block;">Religious Studies</p><br>
+                    </div>
 
-            <form action = '/schedule_basic_skills'> 
-                <input class = "w3-btn w3-black" type = "submit" value = "Next">
+                    <button style = "display: block; margin-bottom: 10px;"  type="button" class="btn btn-danger" data-toggle="collapse" data-target="#Social_and_Behavior_Science">Social and Behavior Science</button>
+                    <div id = "Social_and_Behavior_Science" class = "w3-container collapse" style = "padding-bottom: 10px;">
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "ANTH"><p style = "display: inline-block;">Anthropology</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "GEOG"><p style = "display: inline-block;">Geography</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "HIST"><p style = "display: inline-block;">History</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "AFRS"><p style = "display: inline-block;">Pan African Studies</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "POLS"><p style = "display: inline-block;">Political Science</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "PSY"><p style = "display: inline-block;">Psychology</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "SOC"><p style = "display: inline-block;">Sociology</p><br>
+                        <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_elective_preference" value = "URBS"><p style = "display: inline-block;">Urban Studies and Planning</p><br>
+                    </div>
+                    <input id = "next" class = "w3-btn w3-black" style = "float: right;" type = "submit" value = "Next">
+                </div>
+
             </form>
         </div>
 
@@ -58,6 +167,7 @@
 					alert('{{message}}')
 				{% endfor %}
 			{% endif %}
-		</script>
+        </script>
 	</body>
 </html>
+

@@ -11,6 +11,7 @@ import datetime
 import time
 from urllib.request import urlopen
 import json
+import ast
 
 def fetch_data(url):
     #try to read the data	
@@ -277,6 +278,7 @@ def index(request):
 
 def dashboard(request):
     if 'user' in request.session:
+        print(request.session['user']['id'])
         content = {
             "aas_data": aas_data,
             "afrs_data": afrs_data,
@@ -296,6 +298,10 @@ def get_preferences(request):
 
 def get_basic_skills_courses(request):
     if 'user' in request.session:
+        user = User.objects.filter(id = request.session['user']['id']).update(general_elective_preference = request.POST.getlist('general_elective_preference'))
+        p = User.objects.filter(id = request.session['user']['id']).values_list('general_elective_preference', flat = True)
+        request.session['user']['ge_prefs'] = p[0]
+        request.session.modified = True
         content = {
             "aas_data": aas_data,
             "afrs_data": afrs_data,
@@ -316,6 +322,14 @@ def get_basic_skills_courses(request):
 
 def get_natural_sciences_courses(request):
     if 'user' in request.session:
+        # for t in request.POST.getlist('general_list'):
+        #     request.session['user']['ge_list'].append(t)
+        # request.session['user']['ge_list'].append(request.POST.getlist('general_list'))
+        # f = [item for sublist in request.session['user']['ge_list'] for item in sublist]
+        # print(json.loads(str(f)))
+        for t in request.POST.getlist('general_list'):
+            request.session['user']['ge_list'].append((ast.literal_eval(t)))
+            request.session.modified = True
         content = {
             "astr_data": astr_data,
             "biol_data": biol_data,
@@ -333,8 +347,11 @@ def get_natural_sciences_courses(request):
 
 def get_arts_and_humanities_courses(request):
     if 'user' in request.session:
+        for t in request.POST.getlist('general_list'):
+            request.session['user']['ge_list'].append((ast.literal_eval(t)))
+            request.session.modified = True
         content = {
-            "astr_data": astr_data,
+            "afrs_data": afrs_data,
             "aas_data": aas_data,
             "anth_data": anth_data,
             "art_data": art_data,
@@ -363,6 +380,9 @@ def get_arts_and_humanities_courses(request):
 
 def get_social_sciences_courses(request):
     if 'user' in request.session:
+        for t in request.POST.getlist('general_list'):
+            request.session['user']['ge_list'].append((ast.literal_eval(t)))
+            request.session.modified = True
         content = {
             "afrs_data": afrs_data,
             "aas_data": aas_data,
@@ -393,6 +413,9 @@ def get_social_sciences_courses(request):
 
 def get_lifelong_learning_courses(request):
     if 'user' in request.session:
+        for t in request.POST.getlist('general_list'):
+            request.session['user']['ge_list'].append((ast.literal_eval(t)))
+            request.session.modified = True
         content = {
             "afrs_data": afrs_data,
             "aas_data": aas_data,
@@ -426,7 +449,7 @@ def get_lifelong_learning_courses(request):
             "kin_data": kin_data,
             "ling_data": ling_data,
             "mse_data": mse_data,
-            "phil": phil_data,
+            "phil_data": phil_data,
             "qs_data": qs_data,
             "rtm_data": rtm_data,
             "sci_data": sci_data,
@@ -440,6 +463,9 @@ def get_lifelong_learning_courses(request):
 
 def get_comparative_cultural_studies_courses(request):
     if 'user' in request.session:
+        for t in request.POST.getlist('general_list'):
+            request.session['user']['ge_list'].append((ast.literal_eval(t)))
+            request.session.modified = True
         content = {
             "aas_data": aas_data,
             "afrs_data": afrs_data,
@@ -490,6 +516,9 @@ def get_comparative_cultural_studies_courses(request):
 
 def get_us_history_and_government_courses(request):
     if 'user' in request.session:
+        for t in request.POST.getlist('general_list'):
+            request.session['user']['ge_list'].append((ast.literal_eval(t)))
+            request.session.modified = True
         content = {
             "aas_data": aas_data,
             "afrs_data": afrs_data,
@@ -507,8 +536,36 @@ def get_us_history_and_government_courses(request):
 def gpa(request):
     pass
 
+def process_schedule(request):
+    if 'user' in request.session:
+        user = User.objects.filter(id = request.session['user']['id'])
+        schedule = Schedule.objects.filter(user_id = user).first()
+        print(schedule)
+        # p = User.objects.filter(id = request.session['user']['id']).values_list('general_elective_preference', flat = True)
+        print(schedule.year_one_semester_one)
+        
+        if request.POST['year'] == 'y1_s1':
+            for t in request.POST.getlist('general_requirements'):
+                schedule.year_one_semester_one.append((ast.literal_eval(t)))
+        print(schedule.year_one_semester_one)
+        content = {
+            'y1_s1': schedule.year_one_semester_one
+        }
+        
+        return render(request, 'csun_calendar/schedule_semesters.html', content)
+    else:
+        messages.error(request, 'You must be logged in to view this page!')
+        return redirect(index)
+
 def schedule_semesters(request):
-    return render(request, 'csun_calendar/schedule_semesters.html')
+    if 'user' in request.session:
+        for t in request.POST.getlist('general_list'):
+            request.session['user']['ge_list'].append((ast.literal_eval(t)))
+            request.session.modified = True
+        return render(request, 'csun_calendar/schedule_semesters.html')
+    else:
+        messages.error(request, 'You must be logged in to view this page!')
+        return redirect(index)
 
 def process_registration(request):
     error = False
@@ -545,12 +602,16 @@ def process_registration(request):
         return redirect(index)
     else: 
         User.objects.create(first_name = request.POST['first_name'], last_name = request.POST['last_name'], student_id = request.POST['student_id'], starting_year = request.POST['starting_year'], email = request.POST['email'], password = bcrypt.hashpw(request.POST['password'].encode(), bcrypt.gensalt()))
+        u = User.objects.last()
+        Schedule.objects.create(user_id = u)
         session_user = {
             'first_name': request.POST['first_name'],
             'last_name': request.POST['last_name'],
             'email': request.POST['email'],
             'student_id': request.POST['student_id'],
-            'id': User.objects.last().id
+            'id': User.objects.last().id,
+            'ge_prefs': [],
+            'ge_list': []
         }
         request.session['user'] = session_user
         messages.success(request, "Thank you for registering! You will be directed to the dashboard page!")
@@ -570,7 +631,9 @@ def process_login(request):
                 'last_name': user[0].last_name,
                 'email': user[0].email,
                 'student_id': user[0].student_id,
-                'id': user[0].id
+                'id': user[0].id,
+                'ge_prefs': [],
+                'ge_list': []
             }
             request.session['user'] = session_user
             return redirect(dashboard)

@@ -79,6 +79,17 @@
                 filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
                 opacity: 1;
             }
+
+            .center {
+                margin: auto;
+                width: 60%;
+                padding: 20px;
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            }
+
+            .hideform {
+                display: none;
+            }
 		</style>
 	</head>
 	<body>
@@ -92,7 +103,116 @@
             </form>
         </header>
 
-        <h1>Create schedule for each semesters</h1>
+        <h1>Create Schedule for Each Semester</h1>
+
+        <button onclick="document.getElementById('id01').style.display='block'" class="w3-display-topmiddle w3-btn w3-black w3-large" style = "margin-top: 140px;">Select Semester and Add Courses</button>
+
+        <div id="id01" class="w3-modal">
+            <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="width:100%; height: 90%;">
+            
+                <div class="w3-center"><br>
+                <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-xlarge w3-transparent w3-display-topright" title="Close Modal">×</span>
+                </div>
+                
+                <div class = 'w3-container'>
+                    <form action = '/process_schedule' method = 'POST'>
+                        {% csrf_token %}
+                        <p>Select Year and Semester: <select name = 'year'>
+                            <option value = "y1_s1">Year One Semester One</option>
+                            <option value = "y1_s2">Year One Semester Two</option>
+                            <option value = "y1_summer">Year One Summer</option>
+                            <option value = "y2_s1">Year Two Semester One</option>
+                            <option value = "y2_s2">Year Two Semester Two</option>
+                            <option value = "y2_summer">Year Two Summer</option>
+                            <option value = "y3_s1">Year Three Semester One</option>
+                            <option value = "y3_s2">Year Three Semester Two</option>
+                            <option value = "y3_summer">Year Three Summer</option>
+                            <option value = "y4_s1">Year Four Semester One</option>
+                            <option value = "y4_s2">Year Four Semester Two</option>
+                            <option value = "y4_summer">Year Four Summer</option>
+                        </select></p>
+                        <div class = 'w3-container w3-display-left' style = "border: 2px solid black; max-width: 420px; max-height: 400px; overflow-y: scroll; overflow-x: scroll;">
+                            <h3>General Requirements</h3>
+                            {% for p in request.session.user.ge_list %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_requirements" value = "{{p}}"><p style = "display: inline-block;" data-tooltip = "{{p.description}}" >{{p.subject}} {{p.catalog_number}} - {{p.title}}. {{p.units}} Units. </p><br>
+                            {% endfor %}
+                        </div>
+
+                        <div class = 'w3-container w3-display-middle' style = "border: 2px solid black; width: 350px; max-height: 400px; overflow-y: scroll;">
+                            <h3>Major Requirements</h3>
+                            <p>To be added...</p>
+                        </div>
+
+                        <div class = 'w3-container w3-display-right' style = "border: 2px solid black; width: 350px; max-height: 400px; overflow-y: scroll;">
+                            <h3>Major Electives</h3>
+                            <p>To be added...</p>
+                        </div>
+                        <input id = "next" class = "w3-btn w3-black" style = "margin-top: 37%; float: right;" type = "submit" value = "Save">
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class = 'w3-container'>
+            <form action = '/submit_schedule' method = 'POST'>
+                {% csrf_token %}
+                <div class = 'w3-display-left w3-container' style = "border: 2px solid black; height: 300px; width: 380px;">
+                    <h3>Year One Semester One</h3>
+                    {% for t in y1_s1 %}
+                        <ul>
+                            <li>{{t.subject}} {{t.catalog_number}} - {{t.title}}</li>
+                        </ul>
+                    {% endfor %}
+                </div>
+
+                <div class = 'w3-display-middle w3-container' style = "border: 2px solid black; height: 300px; width: 380px;">
+                    <h3>Year One Semester Two</h3>
+                </div>
+
+                <div class = 'w3-display-right w3-container' style = "border: 2px solid black; height: 300px; width: 380px;">
+                    <h3>Year One Summer</h3>
+                </div>
+
+                <div class = 'w3-display-left w3-container' style = "border: 2px solid black; margin-top: 400px; height: 300px; width: 380px;">
+                    <h3>Year Two Semester One</h3>
+                </div>
+
+                <div class = 'w3-display-middle w3-container' style = "border: 2px solid black; margin-top: 400px; height: 300px; width: 380px;">
+                    <h3>Year Two Semester Two</h3>
+                </div>
+
+                <div class = 'w3-display-right w3-container' style = "border: 2px solid black; margin-top: 400px; height: 300px; width: 380px;">
+                    <h3>Year Two Summer</h3>
+                </div>
+
+                <div class = 'w3-display-left w3-container' style = "border: 2px solid black; margin-top: 800px; height: 300px; width: 380px;">
+                    <h3>Year Three Semester One</h3>
+                </div>
+
+                <div class = 'w3-display-middle w3-container' style = "border: 2px solid black; margin-top: 800px; height: 300px; width: 380px;">
+                    <h3>Year Three Semester Two</h3>
+                </div>
+
+                <div class = 'w3-display-right w3-container' style = "border: 2px solid black; margin-top: 800px; height: 300px; width: 380px;">
+                    <h3>Year Three Summer</h3>
+                </div>
+
+                <div class = 'w3-display-left w3-container' style = "border: 2px solid black; margin-top: 1200px; height: 300px; width: 380px;">
+                    <h3>Year Four Semester One</h3>
+                </div>
+
+                <div class = 'w3-display-middle w3-container' style = "border: 2px solid black; margin-top: 1200px; height: 300px; width: 380px;">
+                    <h3>Year Four Semester Two</h3>
+                </div>
+
+                <div class = 'w3-display-right w3-container' style = "border: 2px solid black; margin-top: 1200px; height: 300px; width: 380px;">
+                    <h3>Year Four Summer</h3>
+                </div>
+
+                <input style = "float:right; margin-top: 1600px;" class = 'w3-btn w3-black' type = "submit" value = "Save">
+            </form>
+        </div>
+
 	    <script>
 			{% if messages %}
 				{% for message in messages %}
@@ -102,32 +222,12 @@
         </script>
         
         <script>
-            $(document).ready(function() {
-                $("#next").attr('disabled', 'disabled');
-                $('.w3-check').click(function() {
-                    var sum = 0;
-                    $('.w3-check:checked').each(function() {
-                        if(sum < 6) {
-                            $('.w3-check:not(:checked)').each(function() {
-                                $(this).removeAttr('disabled');
-                                $("#next").attr('disabled', 'disabled');
-                            });
-                        };
-                        sum += parseInt($(this).data("units"));
-                        if(sum == 6) {
-                            $('.w3-check:not(:checked)').each(function() {
-                                $("#next").removeAttr('disabled');
-                            });
-                        };
-                        if(sum > 12) {
-                            alert('Maybe you chose too many from this GE section...');
-                            $("#next").attr('disabled', 'disabled');
-                        };
-                    }).change(function() {
-                        sum -= parseInt($(this).data("units"));
-                    });
-                    console.log(sum);
-                });
+            $('#edit_y1_s1').on('click', function () {
+                $('#big_y1_s1').show();
+            });
+
+            $('#close_y1_s1').on('click', function () {
+                $('#big_y1_s1').hide();
             });
         </script>
 	</body>
