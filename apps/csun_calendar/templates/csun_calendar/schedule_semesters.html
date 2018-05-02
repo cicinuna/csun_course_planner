@@ -105,7 +105,7 @@
 
         <h1>Create Schedule for Each Semester</h1>
 
-        <button onclick="document.getElementById('id01').style.display='block'" class="w3-display-topmiddle w3-btn w3-black w3-large" style = "margin-top: 140px;">Select Semester and Add Courses</button>
+        <button onclick="document.getElementById('id01').style.display='block'" class="w3-display-topmiddle w3-btn w3-black w3-large" style = "margin-top: 140px; margin-bottom: 30px;">Select Semester and Add Courses</button>
 
         <div id="id01" class="w3-modal">
             <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="width:100%; height: 90%;">
@@ -138,16 +138,20 @@
                             {% endfor %}
                         </div>
 
-                        <div class = 'w3-container w3-display-middle' style = "border: 2px solid black; width: 350px; max-height: 400px; overflow-y: scroll;">
+                        <div class = 'w3-container w3-display-middle' style = "border: 2px solid black; width: 440px; max-height: 400px; overflow-y: scroll;">
                             <h3>Major Requirements</h3>
-                            <p>To be added...</p>
+                            {% for p in request.session.user.major_list %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_requirements" value = "{{p}}"><p style = "display: inline-block;" data-tooltip = "{{p.description}}" >{{p.subject}} {{p.catalog_number}} - {{p.title}}. {{p.units}} Units. </p><br>
+                            {% endfor %}
                         </div>
 
                         <div class = 'w3-container w3-display-right' style = "border: 2px solid black; width: 350px; max-height: 400px; overflow-y: scroll;">
                             <h3>Major Electives</h3>
-                            <p>To be added...</p>
+                            {% for p in request.session.user.elective_list %}
+                                <input style = "margin-bottom: 5px; padding-bottom: 5px;" class = "w3-check" type = "checkbox" name = "general_requirements" value = "{{p}}"><p style = "display: inline-block;" data-tooltip = "{{p.description}}" >{{p.subject}} {{p.catalog_number}} - {{p.title}}. {{p.units}} Units. </p><br>
+                            {% endfor %}
                         </div>
-                        <input id = "next" class = "w3-btn w3-black" style = "margin-top: 37%; float: right;" type = "submit" value = "Save">
+                        <input id = "next" class = "w3-btn w3-black" style = "margin-top: 35%; float: right;" type = "submit" value = "Save">
                     </form>
                 </div>
             </div>
@@ -156,7 +160,7 @@
         <div class = 'w3-container'>
             <form action = '/submit_schedule' method = 'POST'>
                 {% csrf_token %}
-                <div class = 'w3-display-left w3-container' style = "border: 2px solid black; height: 300px; width: 380px;">
+                <div class = 'w3-display-left w3-container' style = "border: 2px solid black; height: 300px; width: 380px; margin-top: 50px;">
                     <h3>Year One Semester One</h3>
                     {% for t in y1_s1 %}
                         <ul>
@@ -165,47 +169,47 @@
                     {% endfor %}
                 </div>
 
-                <div class = 'w3-display-middle w3-container' style = "border: 2px solid black; height: 300px; width: 380px;">
+                <div class = 'w3-display-middle w3-container' style = "border: 2px solid black; height: 300px; width: 380px; margin-top: 50px;">
                     <h3>Year One Semester Two</h3>
                 </div>
 
-                <div class = 'w3-display-right w3-container' style = "border: 2px solid black; height: 300px; width: 380px;">
+                <div class = 'w3-display-right w3-container' style = "border: 2px solid black; height: 300px; width: 380px; margin-top: 50px;">
                     <h3>Year One Summer</h3>
                 </div>
 
-                <div class = 'w3-display-left w3-container' style = "border: 2px solid black; margin-top: 400px; height: 300px; width: 380px;">
+                <div class = 'w3-display-left w3-container' style = "border: 2px solid black; margin-top: 450px; height: 300px; width: 380px;">
                     <h3>Year Two Semester One</h3>
                 </div>
 
-                <div class = 'w3-display-middle w3-container' style = "border: 2px solid black; margin-top: 400px; height: 300px; width: 380px;">
+                <div class = 'w3-display-middle w3-container' style = "border: 2px solid black; margin-top: 450px; height: 300px; width: 380px;">
                     <h3>Year Two Semester Two</h3>
                 </div>
 
-                <div class = 'w3-display-right w3-container' style = "border: 2px solid black; margin-top: 400px; height: 300px; width: 380px;">
+                <div class = 'w3-display-right w3-container' style = "border: 2px solid black; margin-top: 450px; height: 300px; width: 380px;">
                     <h3>Year Two Summer</h3>
                 </div>
 
-                <div class = 'w3-display-left w3-container' style = "border: 2px solid black; margin-top: 800px; height: 300px; width: 380px;">
+                <div class = 'w3-display-left w3-container' style = "border: 2px solid black; margin-top: 850px; height: 300px; width: 380px;">
                     <h3>Year Three Semester One</h3>
                 </div>
 
-                <div class = 'w3-display-middle w3-container' style = "border: 2px solid black; margin-top: 800px; height: 300px; width: 380px;">
+                <div class = 'w3-display-middle w3-container' style = "border: 2px solid black; margin-top: 850px; height: 300px; width: 380px;">
                     <h3>Year Three Semester Two</h3>
                 </div>
 
-                <div class = 'w3-display-right w3-container' style = "border: 2px solid black; margin-top: 800px; height: 300px; width: 380px;">
+                <div class = 'w3-display-right w3-container' style = "border: 2px solid black; margin-top: 850px; height: 300px; width: 380px;">
                     <h3>Year Three Summer</h3>
                 </div>
 
-                <div class = 'w3-display-left w3-container' style = "border: 2px solid black; margin-top: 1200px; height: 300px; width: 380px;">
+                <div class = 'w3-display-left w3-container' style = "border: 2px solid black; margin-top: 1250px; height: 300px; width: 380px;">
                     <h3>Year Four Semester One</h3>
                 </div>
 
-                <div class = 'w3-display-middle w3-container' style = "border: 2px solid black; margin-top: 1200px; height: 300px; width: 380px;">
+                <div class = 'w3-display-middle w3-container' style = "border: 2px solid black; margin-top: 1250px; height: 300px; width: 380px;">
                     <h3>Year Four Semester Two</h3>
                 </div>
 
-                <div class = 'w3-display-right w3-container' style = "border: 2px solid black; margin-top: 1200px; height: 300px; width: 380px;">
+                <div class = 'w3-display-right w3-container' style = "border: 2px solid black; margin-top: 1250px; height: 300px; width: 380px;">
                     <h3>Year Four Summer</h3>
                 </div>
 

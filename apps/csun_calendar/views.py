@@ -13,6 +13,7 @@ from urllib.request import urlopen
 import json
 import ast
 
+
 def fetch_data(url):
     #try to read the data	
     try:
@@ -65,6 +66,25 @@ def strip_description(courses):
             continue
         things['description'] = pre + ". " + pres + ". " + core + " " + prep
     return courses
+
+def get_majors(comps, maths):
+
+    major_list = []
+
+    for course in comps:
+        if course['catalog_number'] == '108' or course['catalog_number'] == '110' or course['catalog_number'] == '110L' or course['catalog_number'] == '182' or course['catalog_number'] == '182L' or course['catalog_number'] == '282' or course['catalog_number'] == '122' or course['catalog_number'] == '122L' or course['catalog_number'] == '380' or course['catalog_number'] == '380L' or course['catalog_number'] == '490' or course['catalog_number'] == '490L' or course['catalog_number'] == '491' or course['catalog_number'] == '491L' or course['catalog_number'] == '333' or course['catalog_number'] == '310' or course['catalog_number'] == '322' or course['catalog_number'] == '322L' or course['catalog_number'] == '256' or course['catalog_number'] == '256L' or course['catalog_number'] == '222' or course['catalog_number'] == '482':
+            major_list.append(course)
+    for m in maths:
+        if m['catalog_number'] == '102' or m['catalog_number'] == '105' or m['catalog_number'] == '150A' or m['catalog_number'] == '150B' or m['catalog_number'] == '262' or m['catalog_number'] == '482' or m['catalog_number'] == '340' or m['catalog_number'] == '341':
+            major_list.append(m)
+    return major_list
+
+def get_major_electives(comps):
+    elective_list = []
+    for c in comps:
+        if c['catalog_number'] == '410' or c['catalog_number'] == '424' or c['catalog_number'] == '426' or c['catalog_number'] == '429' or c['catalog_number'] == '440' or c['catalog_number'] == '465' or c['catalog_number'] == '465L' or c['catalog_number'] == '467' or c['catalog_number'] == '469' or c['catalog_number'] == '482' or c['catalog_number'] == '484' or c['catalog_number'] == '484L' or c['catalog_number'] == '485' or c['catalog_number'] == '541' or c['catalog_number'] == '560' or c['catalog_number'] == '565' or c['catalog_number'] == '581' or c['catalog_number'] == '582' or c['catalog_number'] == '583' or c['catalog_number'] == '584' or c['catalog_number'] == '585' or c['catalog_number'] == '586' or c['catalog_number'] == '587' or c['catalog_number'] == '589' or c['catalog_number'] == '595' or c['catalog_number'] == '598' or c['catalog_number'] == '610' or c['catalog_number'] == '615' or c['catalog_number'] == '620' or c['catalog_number'] == '630' or c['catalog_number'] == '680' or c['catalog_number'] == '684' or c['catalog_number'] == '695' or c['catalog_number'] == '696' or c['catalog_number'] == '698' or c['catalog_number'] == '699':
+            elective_list.append(c)
+    return elective_list
 
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 PASSWORD_REGEX = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$')
@@ -548,6 +568,7 @@ def process_schedule(request):
             for t in request.POST.getlist('general_requirements'):
                 schedule.year_one_semester_one.append((ast.literal_eval(t)))
         print(schedule.year_one_semester_one)
+
         content = {
             'y1_s1': schedule.year_one_semester_one
         }
@@ -611,7 +632,9 @@ def process_registration(request):
             'student_id': request.POST['student_id'],
             'id': User.objects.last().id,
             'ge_prefs': [],
-            'ge_list': []
+            'ge_list': [],
+            'major_list': get_majors(strip_description(comp_data), strip_description(math_data)),
+            'elective_list': get_major_electives(strip_description(comp_data))
         }
         request.session['user'] = session_user
         messages.success(request, "Thank you for registering! You will be directed to the dashboard page!")
@@ -633,7 +656,9 @@ def process_login(request):
                 'student_id': user[0].student_id,
                 'id': user[0].id,
                 'ge_prefs': [],
-                'ge_list': []
+                'ge_list': [],
+                'major_list': get_majors(strip_description(comp_data), strip_description(math_data)),
+                'elective_list': get_major_electives(strip_description(comp_data))
             }
             request.session['user'] = session_user
             return redirect(dashboard)
