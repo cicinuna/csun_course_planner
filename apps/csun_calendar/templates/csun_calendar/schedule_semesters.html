@@ -171,46 +171,101 @@
 
                 <div class = 'w3-display-middle w3-container' style = "border: 2px solid black; height: 300px; width: 380px; margin-top: 50px;">
                     <h3>Year One Semester Two</h3>
+                    {% for t in y1_s2 %}
+                        <ul>
+                            <li>{{t.subject}} {{t.catalog_number}} - {{t.title}}</li>
+                        </ul>
+                    {% endfor %}
                 </div>
 
                 <div class = 'w3-display-right w3-container' style = "border: 2px solid black; height: 300px; width: 380px; margin-top: 50px;">
                     <h3>Year One Summer</h3>
+                    {% for t in y1_summer %}
+                        <ul>
+                            <li>{{t.subject}} {{t.catalog_number}} - {{t.title}}</li>
+                        </ul>
+                    {% endfor %}
                 </div>
 
                 <div class = 'w3-display-left w3-container' style = "border: 2px solid black; margin-top: 450px; height: 300px; width: 380px;">
                     <h3>Year Two Semester One</h3>
+                    {% for t in y2_s1 %}
+                        <ul>
+                            <li>{{t.subject}} {{t.catalog_number}} - {{t.title}}</li>
+                        </ul>
+                    {% endfor %}
                 </div>
 
                 <div class = 'w3-display-middle w3-container' style = "border: 2px solid black; margin-top: 450px; height: 300px; width: 380px;">
                     <h3>Year Two Semester Two</h3>
+                    {% for t in y2_s2 %}
+                        <ul>
+                            <li>{{t.subject}} {{t.catalog_number}} - {{t.title}}</li>
+                        </ul>
+                    {% endfor %}
                 </div>
 
                 <div class = 'w3-display-right w3-container' style = "border: 2px solid black; margin-top: 450px; height: 300px; width: 380px;">
                     <h3>Year Two Summer</h3>
+                    {% for t in y2_summer %}
+                        <ul>
+                            <li>{{t.subject}} {{t.catalog_number}} - {{t.title}}</li>
+                        </ul>
+                    {% endfor %}
                 </div>
 
                 <div class = 'w3-display-left w3-container' style = "border: 2px solid black; margin-top: 850px; height: 300px; width: 380px;">
                     <h3>Year Three Semester One</h3>
+                    {% for t in y3_s1 %}
+                        <ul>
+                            <li>{{t.subject}} {{t.catalog_number}} - {{t.title}}</li>
+                        </ul>
+                    {% endfor %}
                 </div>
 
                 <div class = 'w3-display-middle w3-container' style = "border: 2px solid black; margin-top: 850px; height: 300px; width: 380px;">
                     <h3>Year Three Semester Two</h3>
+                    {% for t in y3_s2 %}
+                        <ul>
+                            <li>{{t.subject}} {{t.catalog_number}} - {{t.title}}</li>
+                        </ul>
+                    {% endfor %}
                 </div>
 
                 <div class = 'w3-display-right w3-container' style = "border: 2px solid black; margin-top: 850px; height: 300px; width: 380px;">
                     <h3>Year Three Summer</h3>
+                    {% for t in y3_summer %}
+                        <ul>
+                            <li>{{t.subject}} {{t.catalog_number}} - {{t.title}}</li>
+                        </ul>
+                    {% endfor %}
                 </div>
 
                 <div class = 'w3-display-left w3-container' style = "border: 2px solid black; margin-top: 1250px; height: 300px; width: 380px;">
                     <h3>Year Four Semester One</h3>
+                    {% for t in y4_s1 %}
+                        <ul>
+                            <li>{{t.subject}} {{t.catalog_number}} - {{t.title}}</li>
+                        </ul>
+                    {% endfor %}
                 </div>
 
                 <div class = 'w3-display-middle w3-container' style = "border: 2px solid black; margin-top: 1250px; height: 300px; width: 380px;">
                     <h3>Year Four Semester Two</h3>
+                    {% for t in y4_s2 %}
+                        <ul>
+                            <li>{{t.subject}} {{t.catalog_number}} - {{t.title}}</li>
+                        </ul>
+                    {% endfor %}
                 </div>
 
                 <div class = 'w3-display-right w3-container' style = "border: 2px solid black; margin-top: 1250px; height: 300px; width: 380px;">
                     <h3>Year Four Summer</h3>
+                    {% for t in y4_summer %}
+                        <ul>
+                            <li>{{t.subject}} {{t.catalog_number}} - {{t.title}}</li>
+                        </ul>
+                    {% endfor %}
                 </div>
 
                 <input style = "float:right; margin-top: 1600px;" class = 'w3-btn w3-black' type = "submit" value = "Save">

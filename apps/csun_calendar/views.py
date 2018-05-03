@@ -67,95 +67,81 @@ def strip_description(courses):
         things['description'] = pre + ". " + pres + ". " + core + " " + prep
     return courses
 
-def get_majors(comps, maths):
-
-    major_list = []
-
-    for course in comps:
-        if course['catalog_number'] == '108' or course['catalog_number'] == '110' or course['catalog_number'] == '110L' or course['catalog_number'] == '182' or course['catalog_number'] == '182L' or course['catalog_number'] == '282' or course['catalog_number'] == '122' or course['catalog_number'] == '122L' or course['catalog_number'] == '380' or course['catalog_number'] == '380L' or course['catalog_number'] == '490' or course['catalog_number'] == '490L' or course['catalog_number'] == '491' or course['catalog_number'] == '491L' or course['catalog_number'] == '333' or course['catalog_number'] == '310' or course['catalog_number'] == '322' or course['catalog_number'] == '322L' or course['catalog_number'] == '256' or course['catalog_number'] == '256L' or course['catalog_number'] == '222' or course['catalog_number'] == '482':
-            major_list.append(course)
-    for m in maths:
-        if m['catalog_number'] == '102' or m['catalog_number'] == '105' or m['catalog_number'] == '150A' or m['catalog_number'] == '150B' or m['catalog_number'] == '262' or m['catalog_number'] == '482' or m['catalog_number'] == '340' or m['catalog_number'] == '341':
-            major_list.append(m)
-    return major_list
-
-def get_major_electives(comps):
-    elective_list = []
-    for c in comps:
-        if c['catalog_number'] == '410' or c['catalog_number'] == '424' or c['catalog_number'] == '426' or c['catalog_number'] == '429' or c['catalog_number'] == '440' or c['catalog_number'] == '465' or c['catalog_number'] == '465L' or c['catalog_number'] == '467' or c['catalog_number'] == '469' or c['catalog_number'] == '482' or c['catalog_number'] == '484' or c['catalog_number'] == '484L' or c['catalog_number'] == '485' or c['catalog_number'] == '541' or c['catalog_number'] == '560' or c['catalog_number'] == '565' or c['catalog_number'] == '581' or c['catalog_number'] == '582' or c['catalog_number'] == '583' or c['catalog_number'] == '584' or c['catalog_number'] == '585' or c['catalog_number'] == '586' or c['catalog_number'] == '587' or c['catalog_number'] == '589' or c['catalog_number'] == '595' or c['catalog_number'] == '598' or c['catalog_number'] == '610' or c['catalog_number'] == '615' or c['catalog_number'] == '620' or c['catalog_number'] == '630' or c['catalog_number'] == '680' or c['catalog_number'] == '684' or c['catalog_number'] == '695' or c['catalog_number'] == '696' or c['catalog_number'] == '698' or c['catalog_number'] == '699':
-            elective_list.append(c)
-    return elective_list
 
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 PASSWORD_REGEX = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$')
 STUDENT_ID_REGEX = re.compile(r'^(\d{9})$')
-AAS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/aas'
-AFRS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/afrs'
-CAS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/cas'
-CHS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/chs'
-ENGL_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/engl'
-LING_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/ling'
-QS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/qs'
-COMS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/coms'
-PHIL_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/phil'
-RS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/rs'
-MATH_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/math'
-ASTR_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/astr'
-BIOL_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/biol'
-CHEM_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/chem'
-GEOG_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/geog'
-GEOL_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/geol'
-PHYS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/phys'
-SCI_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/sci'
-SUST_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/sust'
-ANTH_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/anth'
-ART_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/art'
-CLAS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/clas'
-CTVA_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/ctva'
-FLIT_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/flit'
-GWS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/gws'
-HIST_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/hist'
-HUM_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/hum'
-JS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/js'
-KIN_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/kin'
-MUS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/mus'
-TH_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/th'
-AIS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/ais'
-CADV_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/cadv'
-ECON_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/econ'
-HHD_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/hhd'
-HSCI_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/hsci'
-MKT_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/mkt'
-POLS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/pols'
-PSY_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/psy'
-SOC_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/soc'
-URBS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/urbs'
-BLAW_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/blaw'
-BUS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/bus'
-CCE_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/cce'
-CD_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/cd'
-CJS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/cjs'
-CM_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/cm'
-COMP_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/comp'
-EOH_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/eoh'
-FCS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/fcs'
-FIN_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/fin'
-JOUR_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/jour'
-MSE_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/mse'
-RTM_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/rtm'
-UNIV_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/univ'
-ARAB_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/arab'
-ARMN_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/armn'
-CHIN_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/chin'
-FREN_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/fren'
-HEBR_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/hebr'
-ITAL_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/ital'
-JAPN_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/japn'
-KOR_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/kor'
-PERS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/pers'
-RUSS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/russ'
-SPAN_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/span'
-SPED_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/courses/sped'
+AAS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/aas'
+AFRS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/afrs'
+CAS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/cas'
+CHS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/chs'
+ENGL_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/engl'
+LING_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/ling'
+QS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/qs'
+COMS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/coms'
+PHIL_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/phil'
+RS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/rs'
+ASTR_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/astr'
+BIOL_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/biol'
+MATH_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/math'
+CHEM_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/chem'
+GEOG_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/geog'
+GEOL_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/geol'
+PHYS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/phys'
+SCI_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/sci'
+SUST_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/sust'
+ANTH_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/anth'
+ART_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/art'
+CLAS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/clas'
+CTVA_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/ctva'
+FLIT_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/flit'
+GWS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/gws'
+HIST_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/hist'
+HUM_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/hum'
+JS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/js'
+KIN_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/kin'
+MUS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/mus'
+TH_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/th'
+AIS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/ais'
+CADV_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/cadv'
+ECON_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/econ'
+HHD_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/hhd'
+HSCI_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/hsci'
+MKT_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/mkt'
+POLS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/pols'
+PSY_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/psy'
+SOC_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/soc'
+URBS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/urbs'
+BLAW_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/blaw'
+BUS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/bus'
+CCE_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/cce'
+CD_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/cd'
+CJS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/cjs'
+CM_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/cm'
+EOH_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/eoh'
+COMP_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/comp'
+FCS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/fcs'
+FIN_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/fin'
+JOUR_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/jour'
+MSE_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/mse'
+RTM_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/rtm'
+UNIV_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/univ'
+ARAB_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/arab'
+ARMN_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/armn'
+CHIN_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/chin'
+FREN_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/fren'
+HEBR_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/hebr'
+ITAL_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/ital'
+JAPN_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/japn'
+KOR_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/kor'
+PERS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/pers'
+RUSS_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/russ'
+SPAN_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/span'
+SPED_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/sped'
+COMP_SP_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/spring-'+str(datetime.datetime.now().year-1)+'/courses/sped'
+COMP_SU_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/summer-'+str(datetime.datetime.now().year-1)+'/courses/sped'
+MATH_SP_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/spring-'+str(datetime.datetime.now().year-1)+'/courses/sped'
+MATH_SU_URL = u'https://api.metalab.csun.edu/curriculum/api/2.0/terms/summer-'+str(datetime.datetime.now().year-1)+'/courses/sped'
 
 aas_data = fetch_data(AAS_URL)
 afrs_data = fetch_data(AFRS_URL)
@@ -224,6 +210,10 @@ pers_data = fetch_data(PERS_URL)
 russ_data = fetch_data(RUSS_URL)
 span_data = fetch_data(SPAN_URL)
 sped_data = fetch_data(SPED_URL)
+comp_sp_data = fetch_data(COMP_SP_URL)
+comp_su_data = fetch_data(COMP_SU_URL)
+math_sp_data = fetch_data(MATH_SP_URL)
+math_su_data = fetch_data(MATH_SU_URL)
 
 strip_description(aas_data)
 strip_description(afrs_data)
@@ -292,17 +282,56 @@ strip_description(pers_data)
 strip_description(russ_data)
 strip_description(span_data)
 strip_description(sped_data)
+strip_description(comp_sp_data)
+strip_description(comp_su_data)
+strip_description(math_sp_data)
+strip_description(math_su_data)
+
+def get_majors(comps_fa, comps_sp, comps_su, maths_fa, maths_sp, maths_su):
+
+    comps_fa = comps_fa.extend(comps_sp for comps_sp in comps_sp if comps_sp not in comps_fa)
+    comps_fa = comps_fa.extend(comps_su for comps_su in comps_su if comps_su not in comps_fa)
+    maths_fa = maths_fa.extend(maths_sp for maths_sp in maths_sp if maths_sp not in maths_fa)
+    maths_fa = maths_fa.extend(maths_su for maths_su in maths_su if maths_su not in maths_fa)
+
+    print(comps_fa)
+    print(maths_fa)
+
+    major_list = []
+
+    for course in comps_fa:
+        if course['catalog_number'] == '108' or course['catalog_number'] == '110' or course['catalog_number'] == '110L' or course['catalog_number'] == '182' or course['catalog_number'] == '182L' or course['catalog_number'] == '282' or course['catalog_number'] == '122' or course['catalog_number'] == '122L' or course['catalog_number'] == '380' or course['catalog_number'] == '380L' or course['catalog_number'] == '490' or course['catalog_number'] == '490L' or course['catalog_number'] == '491' or course['catalog_number'] == '491L' or course['catalog_number'] == '333' or course['catalog_number'] == '310' or course['catalog_number'] == '322' or course['catalog_number'] == '322L' or course['catalog_number'] == '256' or course['catalog_number'] == '256L' or course['catalog_number'] == '222' or course['catalog_number'] == '482':
+            major_list.append(course)
+    for m in maths_fa:
+        if m['catalog_number'] == '102' or m['catalog_number'] == '105' or m['catalog_number'] == '150A' or m['catalog_number'] == '150B' or m['catalog_number'] == '262' or m['catalog_number'] == '482' or m['catalog_number'] == '340' or m['catalog_number'] == '341':
+            major_list.append(m)
+    return major_list
+
+def get_major_electives(comps):
+    elective_list = []
+    for c in comps:
+        if c['catalog_number'] == '410' or c['catalog_number'] == '424' or c['catalog_number'] == '426' or c['catalog_number'] == '429' or c['catalog_number'] == '440' or c['catalog_number'] == '465' or c['catalog_number'] == '465L' or c['catalog_number'] == '467' or c['catalog_number'] == '469' or c['catalog_number'] == '482' or c['catalog_number'] == '484' or c['catalog_number'] == '484L' or c['catalog_number'] == '485' or c['catalog_number'] == '541' or c['catalog_number'] == '560' or c['catalog_number'] == '565' or c['catalog_number'] == '581' or c['catalog_number'] == '582' or c['catalog_number'] == '583' or c['catalog_number'] == '584' or c['catalog_number'] == '585' or c['catalog_number'] == '586' or c['catalog_number'] == '587' or c['catalog_number'] == '589' or c['catalog_number'] == '595' or c['catalog_number'] == '598' or c['catalog_number'] == '610' or c['catalog_number'] == '615' or c['catalog_number'] == '620' or c['catalog_number'] == '630' or c['catalog_number'] == '680' or c['catalog_number'] == '684' or c['catalog_number'] == '695' or c['catalog_number'] == '696' or c['catalog_number'] == '698' or c['catalog_number'] == '699':
+            elective_list.append(c)
+    return elective_list
 
 def index(request):
     return render(request, 'csun_calendar/index.html')
 
 def dashboard(request):
     if 'user' in request.session:
-        print(request.session['user']['id'])
         content = {
-            "aas_data": aas_data,
-            "afrs_data": afrs_data,
-            "cas_data": cas_data
+            'y1_s1': schedule.year_one_semester_one,
+            'y1_s2': schedule.year_one_semester_two,
+            'y1_summer': schedule.year_one_summer,
+            'y2_s1': schedule.year_two_semester_one,
+            'y2_s2': schedule.year_two_semester_two,
+            'y2_summer': schedule.year_two_summer,
+            'y3_s1': schedule.year_three_semester_one,
+            'y3_s2': schedule.year_three_semester_two,
+            'y3_summer': schedule.year_three_summer,
+            'y4_s1': schedule.year_four_semester_one,
+            'y4_s2': schedule.year_four_semester_two,
+            'y4_summer': schedule.year_four_summer
         }
         return render(request, 'csun_calendar/dashboard.html', content)
     else:
@@ -567,10 +596,53 @@ def process_schedule(request):
         if request.POST['year'] == 'y1_s1':
             for t in request.POST.getlist('general_requirements'):
                 schedule.year_one_semester_one.append((ast.literal_eval(t)))
-        print(schedule.year_one_semester_one)
+        elif request.POST['year'] == 'y1_s2':
+            for t in request.POST.getlist('general_requirements'):
+                schedule.year_one_semester_two.append((ast.literal_eval(t)))
+        elif request.POST['year'] == 'y1_summer':
+            for t in request.POST.getlist('general_requirements'):
+                schedule.year_one_summer.append((ast.literal_eval(t)))
+        elif request.POST['year'] == 'y2_s1':
+            for t in request.POST.getlist('general_requirements'):
+                schedule.year_two_semester_one.append((ast.literal_eval(t)))
+        elif request.POST['year'] == 'y2_s2':
+            for t in request.POST.getlist('general_requirements'):
+                schedule.year_two_semester_two.append((ast.literal_eval(t)))
+        elif request.POST['year'] == 'y2_summer':
+            for t in request.POST.getlist('general_requirements'):
+                schedule.year_two_summer.append((ast.literal_eval(t)))
+        elif request.POST['year'] == 'y3_s1':
+            for t in request.POST.getlist('general_requirements'):
+                schedule.year_three_semester_one.append((ast.literal_eval(t)))
+        elif request.POST['year'] == 'y3_s2':
+            for t in request.POST.getlist('general_requirements'):
+                schedule.year_three_semester_two.append((ast.literal_eval(t)))
+        elif request.POST['year'] == 'y3_summer':
+            for t in request.POST.getlist('general_requirements'):
+                schedule.year_three_summer.append((ast.literal_eval(t)))
+        elif request.POST['year'] == 'y4_s1':
+            for t in request.POST.getlist('general_requirements'):
+                schedule.year_four_semester_one.append((ast.literal_eval(t)))
+        elif request.POST['year'] == 'y4_s2':
+            for t in request.POST.getlist('general_requirements'):
+                schedule.year_four_semester_two.append((ast.literal_eval(t)))
+        elif request.POST['year'] == 'y4_summer':
+            for t in request.POST.getlist('general_requirements'):
+                schedule.year_four_summer.append((ast.literal_eval(t)))
 
         content = {
-            'y1_s1': schedule.year_one_semester_one
+            'y1_s1': schedule.year_one_semester_one,
+            'y1_s2': schedule.year_one_semester_two,
+            'y1_summer': schedule.year_one_summer,
+            'y2_s1': schedule.year_two_semester_one,
+            'y2_s2': schedule.year_two_semester_two,
+            'y2_summer': schedule.year_two_summer,
+            'y3_s1': schedule.year_three_semester_one,
+            'y3_s2': schedule.year_three_semester_two,
+            'y3_summer': schedule.year_three_summer,
+            'y4_s1': schedule.year_four_semester_one,
+            'y4_s2': schedule.year_four_semester_two,
+            'y4_summer': schedule.year_four_summer
         }
         
         return render(request, 'csun_calendar/schedule_semesters.html', content)
@@ -633,8 +705,8 @@ def process_registration(request):
             'id': User.objects.last().id,
             'ge_prefs': [],
             'ge_list': [],
-            'major_list': get_majors(strip_description(comp_data), strip_description(math_data)),
-            'elective_list': get_major_electives(strip_description(comp_data))
+            'major_list': get_majors(comp_data, comp_sp_data, comp_su_data, math_data, math_sp_data, math_su_data),
+            'elective_list': get_major_electives(comp_data)
         }
         request.session['user'] = session_user
         messages.success(request, "Thank you for registering! You will be directed to the dashboard page!")
@@ -657,7 +729,7 @@ def process_login(request):
                 'id': user[0].id,
                 'ge_prefs': [],
                 'ge_list': [],
-                'major_list': get_majors(strip_description(comp_data), strip_description(math_data)),
+                'major_list': get_majors(comp_data, comp_sp_data, comp_su_data, math_data, math_sp_data, math_su_data),
                 'elective_list': get_major_electives(strip_description(comp_data))
             }
             request.session['user'] = session_user
