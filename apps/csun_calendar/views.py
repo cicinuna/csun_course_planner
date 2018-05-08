@@ -842,8 +842,9 @@ def schedule_semesters(request):
                     if specific_majors_data(comp_data, '222') in sc:
                         to_show_list.append(m)
                 if m['catalog_number'] == '482' and m not in sc:
-                    if (specific_majors_data(comp_data, '282') and specific_majors_data(math_data, '262')) in sc:
-                        to_show_list.append(m)                         
+                    if specific_majors_data(math_data, '482') not in sc:
+                        if (specific_majors_data(comp_data, '282') and specific_majors_data(math_data, '262')) in sc:
+                            to_show_list.append(m)                         
                 if m['catalog_number'] == '490' and m not in sc:
                     if specific_majors_data(comp_data, '380') in sc:
                         to_show_list.append(m)
@@ -873,14 +874,17 @@ def schedule_semesters(request):
                     if specific_majors_data(math_data, '150B') in sc:
                         to_show_list.append(m)
                 if m['catalog_number'] == '482' and m not in sc:
-                    if (specific_majors_data(math_data, '262') and specific_majors_data(comp_data, '282')) in sc:
-                        to_show_list.append(m)
+                    if specific_majors_data(comp_data, '482') not in sc:
+                        if (specific_majors_data(math_data, '262') and specific_majors_data(comp_data, '282')) in sc:
+                            to_show_list.append(m)
                 if m['catalog_number'] == '340' and m not in sc:
-                    if specific_majors_data(math_data, '150B') in sc:
-                        to_show_list.append(m)
+                    if specific_majors_data(math_data, '341') not in sc:
+                        if specific_majors_data(math_data, '150B') in sc:
+                            to_show_list.append(m)
                 if m['catalog_number'] == '341' and m not in sc:
-                    if specific_majors_data(math_data, '150B') in sc:
-                        to_show_list.append(m)   
+                    if specific_majors_data(math_data, '340') not in sc:
+                        if specific_majors_data(math_data, '150B') in sc:
+                            to_show_list.append(m)   
         
 
 
@@ -991,6 +995,21 @@ def schedule_semesters(request):
     else:
         messages.error(request, 'You must be logged in to view this page!')
         return redirect(index)
+
+def submit_schedule(request):
+    if 'user' in request.session:
+        user = User.objects.filter(id = request.session['user']['id']).first()
+        schedule = Schedule.objects.filter(user_id = user).first()
+        schedule.year_four_semester_two = get_dict(schedule.year_four_semester_two)
+
+        if len(schedule.year_four_semester_two) != 0:
+            return redirect(dashboard)
+        else:
+            return redirect(schedule_semesters)
+    else:
+        messages.error(request, 'You must be logged in to view this page!')
+        return redirect(index)
+
 
 def process_registration(request):
     error = False

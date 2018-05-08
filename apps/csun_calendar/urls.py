@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^schedule_us_history_and_government$', views.get_us_history_and_government_courses),
     url(r'^schedule_semesters$', views.schedule_semesters),
     url(r'^process_schedule$', views.process_schedule),
+    url(r'^submit_schedule$', views.submit_schedule),
     url(r'^gpa$', views.gpa),
     url(r'^logout$', views.logout),
     url(r'^login$', views.process_login),
