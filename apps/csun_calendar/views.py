@@ -148,7 +148,7 @@ PERS_URL = u'http://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(dat
 RUSS_URL = u'http://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/russ'
 SPAN_URL = u'http://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/span'
 SPED_URL = u'http://api.metalab.csun.edu/curriculum/api/2.0/terms/fall-'+str(datetime.datetime.now().year-1)+'/courses/sped'
-COMP_SP_URL = u'http://api.metalab.csun.edu/curriculum/api/2.0/terms/spring-'+str(datetime.datetime.now().year-1)+'/courses/sped'
+COMP_SP_URL = u'http://api.metalab.csun.edu/curriculum/api/2.0/terms/spring-'+str(datetime.datetime.now().year-1)+'/courses/comp'
 COMP_SU_URL = u'http://api.metalab.csun.edu/curriculum/api/2.0/terms/summer-'+str(datetime.datetime.now().year-1)+'/courses/sped'
 MATH_SP_URL = u'http://api.metalab.csun.edu/curriculum/api/2.0/terms/spring-'+str(datetime.datetime.now().year-1)+'/courses/sped'
 MATH_SU_URL = u'http://api.metalab.csun.edu/curriculum/api/2.0/terms/summer-'+str(datetime.datetime.now().year-1)+'/courses/sped'
@@ -394,7 +394,8 @@ def get_preferences(request):
 
         schedules = [schedule.year_one_semester_one, schedule.year_one_semester_two, schedule.year_one_summer, schedule.year_two_semester_one, schedule.year_two_semester_two, schedule.year_two_summer, schedule.year_three_semester_one, schedule.year_three_semester_two, schedule.year_three_summer, schedule.year_four_semester_one, schedule.year_four_semester_two, schedule.year_four_summer]
         for s in schedules:
-            s.clear()
+            # s.clear()
+            del s[:]
         
         schedule.save()
         return render(request, 'csun_calendar/schedule_preferences.html')
@@ -670,7 +671,7 @@ def gpa(request):
             'y4_summer': schedule.year_four_summer,
             'y': user.starting_year
         }
-        return render(request, 'csun_calendar/dashboard.html', content)
+        return render(request, 'csun_calendar/gpa.html', content)
     else:
         messages.error(request, 'You must be logged in to view this page!')
         return redirect(index)
