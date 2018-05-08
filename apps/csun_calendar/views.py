@@ -304,7 +304,7 @@ def specific_majors_data(classes, c_num):
     return {}
 
 
-def get_majors(comps, maths):
+def get_majors(comps_fall, comps_spring, maths):
 
     # comps_fa = comps_fa.extend(comps_sp for comps_sp in comps_sp if comps_sp not in comps_fa)
     # comps_fa = comps_fa.extend(comps_su for comps_su in comps_su if comps_su not in comps_fa)
@@ -316,9 +316,14 @@ def get_majors(comps, maths):
 
     major_list = []
 
-    for course in comps:
-        if course['catalog_number'] == '108' or course['catalog_number'] == '110' or course['catalog_number'] == '110L' or course['catalog_number'] == '182' or course['catalog_number'] == '182L' or course['catalog_number'] == '282' or course['catalog_number'] == '122' or course['catalog_number'] == '122L' or course['catalog_number'] == '380' or course['catalog_number'] == '380L' or course['catalog_number'] == '490' or course['catalog_number'] == '490L' or course['catalog_number'] == '491' or course['catalog_number'] == '491L' or course['catalog_number'] == '333' or course['catalog_number'] == '310' or course['catalog_number'] == '322' or course['catalog_number'] == '322L' or course['catalog_number'] == '256' or course['catalog_number'] == '256L' or course['catalog_number'] == '222' or course['catalog_number'] == '482':
-            major_list.append(course)
+    for course in comps_fall:
+        if course not in major_list:
+            if course['catalog_number'] == '108' or course['catalog_number'] == '110' or course['catalog_number'] == '110L' or course['catalog_number'] == '182' or course['catalog_number'] == '182L' or course['catalog_number'] == '282' or course['catalog_number'] == '122' or course['catalog_number'] == '122L' or course['catalog_number'] == '380' or course['catalog_number'] == '380L' or course['catalog_number'] == '490' or course['catalog_number'] == '490L' or course['catalog_number'] == '491' or course['catalog_number'] == '491L' or course['catalog_number'] == '333' or course['catalog_number'] == '310' or course['catalog_number'] == '322' or course['catalog_number'] == '322L' or course['catalog_number'] == '256' or course['catalog_number'] == '256L' or course['catalog_number'] == '222' or course['catalog_number'] == '482':
+                major_list.append(course)
+    for course in comps_spring:
+        if course not in major_list:
+            if course['catalog_number'] == '108' or course['catalog_number'] == '110' or course['catalog_number'] == '110L' or course['catalog_number'] == '182' or course['catalog_number'] == '182L' or course['catalog_number'] == '282' or course['catalog_number'] == '122' or course['catalog_number'] == '122L' or course['catalog_number'] == '380' or course['catalog_number'] == '380L' or course['catalog_number'] == '490' or course['catalog_number'] == '490L' or course['catalog_number'] == '491' or course['catalog_number'] == '491L' or course['catalog_number'] == '333' or course['catalog_number'] == '310' or course['catalog_number'] == '322' or course['catalog_number'] == '322L' or course['catalog_number'] == '256' or course['catalog_number'] == '256L' or course['catalog_number'] == '222' or course['catalog_number'] == '482':
+                major_list.append(course)
     for m in maths:
         if m['catalog_number'] == '102' or m['catalog_number'] == '105' or m['catalog_number'] == '150A' or m['catalog_number'] == '150B' or m['catalog_number'] == '262' or m['catalog_number'] == '482' or m['catalog_number'] == '340' or m['catalog_number'] == '341':
             major_list.append(m)
@@ -774,9 +779,10 @@ def schedule_semesters(request):
         if schedule.year_four_semester_one != [] and schedule.year_four_semester_two == []:
             current = schedule.year_four_semester_two
             previous = schedule.year_four_semester_one                         
-        
+        if schedule.year_four_semester_two != []:
+            current = schedule.year_four_semester_two
         # not_show_list = get_majors(comp_data, math_data)
-        request.session['user']['major_list'] = get_majors(comp_data, math_data)
+        request.session['user']['major_list'] = get_majors(comp_data, comp_sp_data, math_data)
         request.session.modified = True
         to_show_list = []
         for m in request.session['user']['major_list']:
@@ -952,18 +958,14 @@ def schedule_semesters(request):
         if specific_majors_data(comp_data, '380') in sc and specific_majors_data(comp_data, '322') in sc:
             to_show_elective = request.session['user']['elective_list']
             not_show_elective = []
+        for j in get_major_electives(comp_data):
+            if j in sc:
+                added_elective.append(j)
         for x in to_show_elective:
             if x in sc:
                 to_show_elective.remove(x)
-                added_elective.append(x)
 
-        elective_unit_sum = 0
-        for a in added_elective:
-            elective_unit_sum += int(a['units'])
 
-        print(current)
-        # y1_s1_json = json.dumps(schedule.year_one_semester_one)
-        # print(y1_s1_json)
         content = {
             'y1_s1': schedule.year_one_semester_one,
             'y1_s2': schedule.year_one_semester_two,
@@ -982,7 +984,6 @@ def schedule_semesters(request):
             'current': current,
             'to_show_elective': to_show_elective,
             'not_show_elective': not_show_elective,
-            'elective_unit_sum': elective_unit_sum,
             'added_elective': added_elective
         }
         return render(request, 'csun_calendar/schedule_semesters.html', content)
@@ -1036,7 +1037,7 @@ def process_registration(request):
             'ge_prefs': [],
             'ge_list': [],
             'json_ge_list': [],
-            'major_list': get_majors(comp_data, math_data),
+            'major_list': get_majors(comp_data, comp_sp_data, math_data),
             'elective_list': get_major_electives(comp_data), 
             'y': request.POST['starting_year']
         }
@@ -1062,7 +1063,7 @@ def process_login(request):
                 'ge_prefs': [],
                 'ge_list': [],
                 'json_ge_list': [],
-                'major_list': get_majors(comp_data, math_data),
+                'major_list': get_majors(comp_data, comp_sp_data, math_data),
                 'elective_list': get_major_electives(comp_data),
                 'y': user[0].starting_year
             }

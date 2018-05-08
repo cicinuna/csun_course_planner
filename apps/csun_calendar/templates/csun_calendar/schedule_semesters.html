@@ -318,9 +318,34 @@
 
         <script>
             $(document).ready(function() {
+                var elective_sum = 0;
+                $('.hidden').each(function() {
+                    elective_sum += parseInt($(this).data("value"));
+                });
+
                 $('.w3-check').click(function() {
+                    // var new_sum = 0;
                     var sum = 0;
+                    // elective_sum = new_sum + elective_sum;
+                    console.log(elective_sum);
                     $('.w3-check:checked').each(function() {
+                    //     if($(this).data("type") == "elective") {
+                    //         new_sum += parseInt($(this).data("value"));
+                    //         console.log("elective sum after click" + (new_sum + elective_sum))
+                    //         elective_sum = new_sum + elective_sum;
+                    //     }
+                    //     $('[data-type]:not(:checked)').each(function() {
+                    //         console.log($(this).data("type") == "elective")
+                    //         if((elective_sum) < 15) {
+                    //             if($(this).data("type") == "elective") {
+                    //                 $(this).removeAttr('disabled');
+                    //             }
+                    //         } else {
+                    //             if($(this).data("type") == "elective") {
+                    //                 $(this).attr('disabled', 'disabled');
+                    //             }
+                    //         }
+                    //     });
                         if(sum > 0 && sum <= 17) {
                             $("#next").removeAttr('disabled');
                         };
@@ -331,13 +356,20 @@
                         };
                     }).change(function() {
                         sum -= parseInt($(this).data("value"));
+                        // if($(this).data("type") == "elective") {
+                        //     console.log(new_sum);
+                        //     new_sum -= parseInt($(this).data("value"));
+                        //     console.log(new_sum);
+                        //     eletive_sum = new_sum + elective_sum;
+                        // }
                     });
                     console.log("sum for total is:" + sum);
+                    
                 });
             });
         </script>
 
-        <script>
+        <!-- <script>
             $(document).ready(function() {
                 $('.hidden').each(function() {
                     var elective_sum = 0;
@@ -365,7 +397,7 @@
                     })
                 })
             });
-        </script>
+        </script> -->
 	</body>
 </html>
 
