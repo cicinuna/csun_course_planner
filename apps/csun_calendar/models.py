@@ -27,6 +27,7 @@ class User(models.Model):
     year_four_summer_gpa = models.FloatField(default = 0.0, blank = True)
     cumulative_gpa = models.FloatField(default = 0.0, blank = True)
     general_elective_preference = ArrayField(ArrayField(models.CharField(max_length = 255), blank = True), null = True)
+    general_electives = ArrayField(models.TextField(), blank = True, null = True, default = [])
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
 

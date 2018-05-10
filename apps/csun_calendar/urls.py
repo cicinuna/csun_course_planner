@@ -17,6 +17,8 @@ urlpatterns = [
     url(r'^process_schedule$', views.process_schedule),
     url(r'^submit_schedule$', views.submit_schedule),
     url(r'^gpa$', views.gpa),
+    url(r'^redo_gpa$', views.redo_gpa),
+    url(r'^process_gpa$', views.process_gpa),
     url(r'^logout$', views.logout),
     url(r'^login$', views.process_login),
 ]

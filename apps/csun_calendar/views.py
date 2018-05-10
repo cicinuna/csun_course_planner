@@ -640,9 +640,312 @@ def get_us_history_and_government_courses(request):
         messages.error(request, 'You must be logged in to view this page!')
         return redirect(index)
 
+def process_gpa(request):
+    if 'user' in request.session:
+        failed = False
+        user = User.objects.filter(id = request.session['user']['id']).first()
+        schedule = Schedule.objects.filter(user_id = user).first()
+        schedule.year_one_semester_one = get_dict(schedule.year_one_semester_one)
+        schedule.year_one_semester_two = get_dict(schedule.year_one_semester_two)
+        schedule.year_one_summer = get_dict(schedule.year_one_summer)
+        schedule.year_two_semester_one = get_dict(schedule.year_two_semester_one)
+        schedule.year_two_semester_two = get_dict(schedule.year_two_semester_two)
+        schedule.year_two_summer = get_dict(schedule.year_two_summer)
+        schedule.year_three_semester_one = get_dict(schedule.year_three_semester_one)
+        schedule.year_three_semester_two = get_dict(schedule.year_three_semester_two)
+        schedule.year_three_summer = get_dict(schedule.year_three_summer)
+        schedule.year_four_semester_one = get_dict(schedule.year_four_semester_one)
+        schedule.year_four_semester_two = get_dict(schedule.year_four_semester_two)
+        schedule.year_four_summer = get_dict(schedule.year_four_summer)
+        cumulative_gpa = user.cumulative_gpa
+        schedules = [schedule.year_one_semester_one, schedule.year_one_semester_two, schedule.year_one_summer, schedule.year_two_semester_one, schedule.year_two_semester_two, schedule.year_two_summer, schedule.year_three_semester_one, schedule.year_three_semester_two, schedule.year_three_summer, schedule.year_four_semester_one, schedule.year_four_semester_two, schedule.year_four_summer]
+        sc = []
+        for s in schedules:
+            for p in s:
+                sc.append(p)
+        print(user.cumulative_gpa)
+        if request.POST['year'] == "y1_s1":
+            for m in request.POST.getlist("gpa_values"):
+                if float(m) < 2.0:
+                    messages.error(request, "You've failed a course and you will be redirected to create a new schedule starting next semester.")
+                    failed = True
+                    schedule.year_one_semester_two.clear()
+                    schedule.year_one_summer.clear()
+                    schedule.year_two_semester_one.clear()
+                    schedule.year_two_semester_two.clear()
+                    schedule.year_two_summer.clear()
+                    schedule.year_three_semester_one.clear()
+                    schedule.year_three_semester_two.clear()
+                    schedule.year_three_summer.clear()
+                    schedule.year_four_semester_one.clear()
+                    schedule.year_four_semester_two.clear()
+                    schedule.year_four_summer.clear()
+                    schedule.save()
+                    for s in user.general_electives:
+                        if s not in scchedule.year_one_semester_one:
+                            request.session['user']['ge_list'].append(s)
+                            request.session.modified = True
+            user.year_one_semester_one_gpa = sum(list(map(float, request.POST.getlist("gpa_values")))) / len(request.POST.getlist("gpa_values"))
+            user.cumulative_gpa = user.cumulative_gpa + (sum(list(map(float, request.POST.getlist("gpa_values")))) / len(request.POST.getlist("gpa_values")))
+            user.save()
+        if request.POST['year'] == "y1_s2":
+            for m in request.POST.getlist("gpa_values"):
+                if float(m) < 2.0:
+                    messages.error(request, "You've failed a course and you will be redirected to create a new schedule starting next semester.")
+                    failed = True
+                    schedule.year_one_summer.clear()
+                    schedule.year_two_semester_one.clear()
+                    schedule.year_two_semester_two.clear()
+                    schedule.year_two_summer.clear()
+                    schedule.year_three_semester_one.clear()
+                    schedule.year_three_semester_two.clear()
+                    schedule.year_three_summer.clear()
+                    schedule.year_four_semester_one.clear()
+                    schedule.year_four_semester_two.clear()
+                    schedule.year_four_summer.clear()
+                    schedule.save()
+                    for s in user.general_electives:
+                        if s not in (scchedule.year_one_semester_one or schedule.year_one_semester_two):
+                            request.session['user']['ge_list'].append(s)
+                            request.session.modified = True   
+            user.year_one_semester_two_gpa = sum(list(map(float, request.POST.getlist("gpa_values")))) / len(request.POST.getlist("gpa_values"))
+            user.cumulative_gpa = (user.cumulative_gpa + (sum(list(map(float, request.POST.getlist("gpa_values")))) / len(request.POST.getlist("gpa_values")))) / 2
+            user.save()
+        if request.POST['year'] == "y1_summer":
+            for m in request.POST.getlist("gpa_values"):
+                if float(m) < 2.0:
+                    messages.error(request, "You've failed a course and you will be redirected to create a new schedule starting next semester.")
+                    failed = True
+                    schedule.year_two_semester_one.clear()
+                    schedule.year_two_semester_two.clear()
+                    schedule.year_two_summer.clear()
+                    schedule.year_three_semester_one.clear()
+                    schedule.year_three_semester_two.clear()
+                    schedule.year_three_summer.clear()
+                    schedule.year_four_semester_one.clear()
+                    schedule.year_four_semester_two.clear()
+                    schedule.year_four_summer.clear()
+                    schedule.save()
+                    for s in user.general_electives:
+                        if s not in (scchedule.year_one_semester_one or schedule.year_one_semester_two or schedule.year_one_summer):
+                            request.session['user']['ge_list'].append(s)
+                            request.session.modified = True
+            user.year_one_summer_gpa = sum(list(map(float, request.POST.getlist("gpa_values")))) / len(request.POST.getlist("gpa_values"))
+            user.cumulative_gpa = (user.cumulative_gpa + (sum(list(map(float, request.POST.getlist("gpa_values")))) / len(request.POST.getlist("gpa_values")))) / 2
+            user.save()
+        if request.POST['year'] == "y2_s1":
+            for m in request.POST.getlist("gpa_values"):
+                if float(m) < 2.0:
+                    messages.error(request, "You've failed a course and you will be redirected to create a new schedule starting next semester.")
+                    failed = True
+                    schedule.year_two_semester_two.clear()
+                    schedule.year_two_summer.clear()
+                    schedule.year_three_semester_one.clear()
+                    schedule.year_three_semester_two.clear()
+                    schedule.year_three_summer.clear()
+                    schedule.year_four_semester_one.clear()
+                    schedule.year_four_semester_two.clear()
+                    schedule.year_four_summer.clear()
+                    schedule.save()
+                    for s in user.general_electives:
+                        if s not in (scchedule.year_one_semester_one or schedule.year_one_semester_two or schedule.year_one_summer or schedule.year_two_semester_one):
+                            request.session['user']['ge_list'].append(s)
+                            request.session.modified = True
+            user.year_two_semester_one_gpa = sum(list(map(float, request.POST.getlist("gpa_values")))) / len(request.POST.getlist("gpa_values"))
+            user.cumulative_gpa = (user.cumulative_gpa + (sum(list(map(float, request.POST.getlist("gpa_values")))) / len(request.POST.getlist("gpa_values")))) / 2
+            user.save()
+        if request.POST['year'] == "y2_s2":
+            for m in request.POST.getlist("gpa_values"):
+                if float(m) < 2.0:
+                    messages.error(request, "You've failed a course and you will be redirected to create a new schedule starting next semester.")
+                    failed = True
+                    schedule.year_two_summer.clear()
+                    schedule.year_three_semester_one.clear()
+                    schedule.year_three_semester_two.clear()
+                    schedule.year_three_summer.clear()
+                    schedule.year_four_semester_one.clear()
+                    schedule.year_four_semester_two.clear()
+                    schedule.year_four_summer.clear()
+                    schedule.save()
+                    for s in user.general_electives:
+                        if s not in (scchedule.year_one_semester_one or schedule.year_one_semester_two or schedule.year_one_summer or schedule.year_two_semester_one or schedule.year_two_semester_two):
+                            request.session['user']['ge_list'].append(s)
+                            request.session.modified = True
+            user.year_two_semester_two_gpa = sum(list(map(float, request.POST.getlist("gpa_values")))) / len(request.POST.getlist("gpa_values"))
+            user.cumulative_gpa = (user.cumulative_gpa + (sum(list(map(float, request.POST.getlist("gpa_values")))) / len(request.POST.getlist("gpa_values")))) / 2
+            user.save()
+        if request.POST['year'] == "y2_summer":
+            for m in request.POST.getlist("gpa_values"):
+                if float(m) < 2.0:
+                    messages.error(request, "You've failed a course and you will be redirected to create a new schedule starting next semester.")
+                    failed = True
+                    schedule.year_three_semester_one.clear()
+                    schedule.year_three_semester_two.clear()
+                    schedule.year_three_summer.clear()
+                    schedule.year_four_semester_one.clear()
+                    schedule.year_four_semester_two.clear()
+                    schedule.year_four_summer.clear()
+                    schedule.save()
+                    for s in user.general_electives:
+                        if s not in (scchedule.year_one_semester_one or schedule.year_one_semester_two or schedule.year_one_summer or schedule.year_two_semester_one or schedule.year_two_semester_two or schedule.year_two_summer):
+                            request.session['user']['ge_list'].append(s)
+                            request.session.modified = True    
+            user.year_two_summer_gpa = sum(list(map(float, request.POST.getlist("gpa_values")))) / len(request.POST.getlist("gpa_values"))
+            user.cumulative_gpa = (user.cumulative_gpa + (sum(list(map(float, request.POST.getlist("gpa_values")))) / len(request.POST.getlist("gpa_values")))) / 2
+            user.save()                                                 
+        if request.POST['year'] == "y3_s1":
+            for m in request.POST.getlist("gpa_values"):
+                if float(m) < 2.0:
+                    messages.error(request, "You've failed a course and you will be redirected to create a new schedule starting next semester.")
+                    failed = True
+                    schedule.year_three_semester_two.clear()
+                    schedule.year_three_summer.clear()
+                    schedule.year_four_semester_one.clear()
+                    schedule.year_four_semester_two.clear()
+                    schedule.year_four_summer.clear()
+                    schedule.save()
+                    for s in user.general_electives:
+                        if s not in (scchedule.year_one_semester_one or schedule.year_one_semester_two or schedule.year_one_summer or schedule.year_two_semester_one or schedule.year_two_semester_two or schedule.year_two_summer or schedule.year_three_semester_one):
+                            request.session['user']['ge_list'].append(s)
+                            request.session.modified = True
+            user.year_three_semester_one_gpa = sum(list(map(float, request.POST.getlist("gpa_values")))) / len(request.POST.getlist("gpa_values"))
+            user.cumulative_gpa = (user.cumulative_gpa + (sum(list(map(float, request.POST.getlist("gpa_values")))) / len(request.POST.getlist("gpa_values")))) / 2
+            user.save()
+        if request.POST['year'] == "y3_s2":
+            for m in request.POST.getlist("gpa_values"):
+                if float(m) < 2.0:
+                    messages.error(request, "You've failed a course and you will be redirected to create a new schedule starting next semester.")
+                    failed = True
+                    schedule.year_three_summer.clear()
+                    schedule.year_four_semester_one.clear()
+                    schedule.year_four_semester_two.clear()
+                    schedule.year_four_summer.clear()
+                    schedule.save()
+                    for s in user.general_electives:
+                        if s not in (scchedule.year_one_semester_one or schedule.year_one_semester_two or schedule.year_one_summer or schedule.year_two_semester_one or schedule.year_two_semester_two or schedule.year_two_summer or schedule.year_three_semester_one or schedule.year_three_semester_two):
+                            request.session['user']['ge_list'].append(s)
+                            request.session.modified = True
+            user.year_three_semester_two_gpa = sum(list(map(float, request.POST.getlist("gpa_values")))) / len(request.POST.getlist("gpa_values"))
+            user.cumulative_gpa = (user.cumulative_gpa + (sum(list(map(float, request.POST.getlist("gpa_values")))) / len(request.POST.getlist("gpa_values")))) / 2
+            user.save()
+        if request.POST['year'] == "y3_summer":
+            for m in request.POST.getlist("gpa_values"):
+                if float(m) < 2.0:
+                    messages.error(request, "You've failed a course and you will be redirected to create a new schedule starting next semester.")
+                    failed = True
+                    schedule.year_four_semester_one.clear()
+                    schedule.year_four_semester_two.clear()
+                    schedule.year_four_summer.clear()
+                    schedule.save()
+                    for s in user.general_electives:
+                        if s not in (scchedule.year_one_semester_one or schedule.year_one_semester_two or schedule.year_one_summer or schedule.year_two_semester_one or schedule.year_two_semester_two or schedule.year_two_summer or schedule.year_three_semester_one or schedule.year_three_semester_two or schedule.year_three_summer):
+                            request.session['user']['ge_list'].append(s)
+                            request.session.modified = True
+            user.year_three_summer_gpa = sum(list(map(float, request.POST.getlist("gpa_values")))) / len(request.POST.getlist("gpa_values"))
+            user.cumulative_gpa = (user.cumulative_gpa + (sum(list(map(float, request.POST.getlist("gpa_values")))) / len(request.POST.getlist("gpa_values")))) / 2
+            user.save()
+        if request.POST['year'] == "y4_s1":
+            for m in request.POST.getlist("gpa_values"):
+                if float(m) < 2.0:
+                    messages.error(request, "You've failed a course and you will be redirected to create a new schedule starting next semester.")
+                    failed = True
+                    schedule.year_four_semester_two.clear()
+                    schedule.year_four_summer.clear()
+                    schedule.save()
+                    for s in user.general_electives:
+                        if s not in (scchedule.year_one_semester_one or schedule.year_one_semester_two or schedule.year_one_summer or schedule.year_two_semester_one or schedule.year_two_semester_two or schedule.year_two_summer or schedule.year_three_semester_one or schedule.year_three_semester_two or schedule.year_three_summer or schedule.year_four_semester_one):
+                            request.session['user']['ge_list'].append(s)
+                            request.session.modified = True
+            user.year_four_semester_one_gpa = sum(list(map(float, request.POST.getlist("gpa_values")))) / len(request.POST.getlist("gpa_values"))
+            user.cumulative_gpa = (user.cumulative_gpa + (sum(list(map(float, request.POST.getlist("gpa_values")))) / len(request.POST.getlist("gpa_values")))) / 2
+            user.save()
+        if request.POST['year'] == "y4_s2":
+            for m in request.POST.getlist("gpa_values"):
+                if float(m) < 2.0:
+                    messages.error(request, "You've failed a course and you will be redirected to create a new schedule starting next semester.")
+                    failed = True
+                    schedule.year_four_summer.clear()
+                    schedule.save()
+                    for s in user.general_electives:
+                        if s not in (scchedule.year_one_semester_one or schedule.year_one_semester_two or schedule.year_one_summer or schedule.year_two_semester_one or schedule.year_two_semester_two or schedule.year_two_summer or schedule.year_three_semester_one or schedule.year_three_semester_two or schedule.year_three_summer or schedule.year_four_semester_one or schedule.year_four_semester_two):
+                            request.session['user']['ge_list'].append(s)
+                            request.session.modified = True
+            user.year_four_semester_two_gpa = sum(list(map(float, request.POST.getlist("gpa_values")))) / len(request.POST.getlist("gpa_values"))
+            user.cumulative_gpa = (user.cumulative_gpa + (sum(list(map(float, request.POST.getlist("gpa_values")))) / len(request.POST.getlist("gpa_values")))) / 2
+            user.save()                                                 
+        if request.POST['year'] == "y4_summer":
+            for m in request.POST.getlist("gpa_values"):
+                if float(m) < 2.0:
+                    messages.error(request, "You've failed a course and you will be redirected to create a new schedule starting next year.")
+                    failed = True
+                    for s in user.general_electives:
+                        if s not in (scchedule.year_one_semester_one or schedule.year_one_semester_two or schedule.year_one_summer or schedule.year_two_semester_one or schedule.year_two_semester_two or schedule.year_two_summer or schedule.year_three_semester_one or schedule.year_three_semester_two or schedule.year_three_summer or schedule.year_four_semester_one or schedule.year_four_semester_two or schedule.year_four_summer):
+                            request.session['user']['ge_list'].append(s)
+                            request.session.modified = True  
+            user.year_four_summer_gpa = sum(list(map(float, request.POST.getlist("gpa_values")))) / len(request.POST.getlist("gpa_values"))
+            user.cumulative_gpa = (user.cumulative_gpa + (sum(list(map(float, request.POST.getlist("gpa_values")))) / len(request.POST.getlist("gpa_values")))) / 2
+            user.save()  
+
+        if failed:
+            return redirect(schedule_semesters_from_fail_gpa)
+        else:
+            return redirect(gpa)
+    else:
+        messages.error(request, 'You must be logged in to view this page!')
+        return redirect(index)
+
+def redo_gpa(request):
+    if 'user' in request.session:
+        user = User.objects.filter(id = request.session['user']['id']).first()
+        user.year_one_semester_one_gpa = 0.0
+        user.save()
+        user.year_one_semester_two_gpa = 0.0
+        user.save()
+        user.year_one_summer_gpa = 0.0
+        user.save()
+        user.year_two_semester_one_gpa = 0.0
+        user.save()
+        user.year_two_semester_two_gpa = 0.0
+        user.save()
+        user.year_two_summer_gpa = 0.0
+        user.save()
+        user.year_three_semester_one_gpa = 0.0
+        user.save()
+        user.year_three_semester_two_gpa = 0.0
+        user.save()
+        user.year_three_summer_gpa = 0.0
+        user.save()
+        user.year_four_semester_one_gpa = 0.0
+        user.save()
+        user.year_four_semester_two_gpa = 0.0
+        user.save()
+        user.year_four_summer_gpa = 0.0
+        user.save()
+        user.cumulative_gpa = 0.0
+        user.save()
+
+        return redirect(gpa)
+    else:
+        messages.error(request, 'You must be logged in to view this page!')
+        return redirect(index)
+
 def gpa(request):
     if 'user' in request.session:
         user = User.objects.filter(id = request.session['user']['id']).first()
+        print(user.cumulative_gpa)
+        y1_s1_gpa = user.year_one_semester_one_gpa
+        y1_s2_gpa = user.year_one_semester_two_gpa
+        y1_summer_gpa = user.year_one_summer_gpa
+        y2_s1_gpa = user.year_two_semester_one_gpa
+        y2_s2_gpa = user.year_two_semester_two_gpa
+        y2_summer_gpa = user.year_two_summer_gpa
+        y3_s1_gpa = user.year_three_semester_one_gpa
+        y3_s2_gpa = user.year_three_semester_two_gpa
+        y3_summer_gpa = user.year_three_summer_gpa
+        y4_s1_gpa = user.year_four_semester_one_gpa
+        y4_s2_gpa = user.year_four_semester_two_gpa
+        y4_summer_gpa = user.year_four_summer_gpa
+        cumulative_gpa = user.cumulative_gpa
         schedule = Schedule.objects.filter(user_id = user).first()
         schedule.year_one_semester_one = get_dict(schedule.year_one_semester_one)
         schedule.year_one_semester_two = get_dict(schedule.year_one_semester_two)
@@ -669,7 +972,20 @@ def gpa(request):
             'y4_s1': schedule.year_four_semester_one,
             'y4_s2': schedule.year_four_semester_two,
             'y4_summer': schedule.year_four_summer,
-            'y': user.starting_year
+            'y': user.starting_year,
+            'y1_s1_gpa': y1_s1_gpa,
+            'y1_s2_gpa': y1_s2_gpa,
+            'y1_summer_gpa': y1_summer_gpa,
+            'y2_s1_gpa': y2_s1_gpa,
+            'y2_s2_gpa': y2_s2_gpa,
+            'y2_summer_gpa': y2_summer_gpa,
+            'y3_s1_gpa': y3_s1_gpa,
+            'y3_s2_gpa': y3_s2_gpa,
+            'y3_summer_gpa': y3_summer_gpa,
+            'y4_s1_gpa': y4_s1_gpa,
+            'y4_s2_gpa': y4_s2_gpa,
+            'y4_summer_gpa': y4_summer_gpa,
+            'cumulative_gpa': cumulative_gpa,
         }
         return render(request, 'csun_calendar/gpa.html', content)
     else:
@@ -732,11 +1048,16 @@ def schedule_semesters(request):
         for t in request.POST.getlist('general_list'):
             request.session['user']['ge_list'].append((ast.literal_eval(t)))
             request.session.modified = True
+        added_ge_list = []
 
         request.session['user']['json_ge_list'] = json.dumps(request.session['user']['ge_list'])
         request.session.modified = True
 
         user = User.objects.filter(id = request.session['user']['id']).first()
+
+
+        user.general_electives = request.session['user']['ge_list']
+        print(user.general_electives)
         schedule = Schedule.objects.filter(user_id = user).first()
         schedule.year_one_semester_one = get_dict(schedule.year_one_semester_one)
         schedule.year_one_semester_two = get_dict(schedule.year_one_semester_two)
@@ -900,61 +1221,347 @@ def schedule_semesters(request):
             for t in schedule.year_one_semester_one:
                 if t in request.session['user']['ge_list']:
                     request.session['user']['ge_list'].remove(t)
+                    added_ge_list.append(t)
                     request.session.modified = True
         if schedule.year_one_semester_two:
             for t in schedule.year_one_semester_two:
                 if t in request.session['user']['ge_list']:
                     request.session['user']['ge_list'].remove(t)
+                    added_ge_list.append(t)
                     request.session.modified = True
         if schedule.year_one_summer:
             for t in schedule.year_one_summer:
                 if t in request.session['user']['ge_list']:
                     request.session['user']['ge_list'].remove(t)
+                    added_ge_list.append(t)
                     request.session.modified = True
         if schedule.year_two_semester_one:
             for t in schedule.year_two_semester_one:
                 if t in request.session['user']['ge_list']:
                     request.session['user']['ge_list'].remove(t)
+                    added_ge_list.append(t)
                     request.session.modified = True
         if schedule.year_two_semester_two:
             for t in schedule.year_two_semester_two:
                 if t in request.session['user']['ge_list']:
                     request.session['user']['ge_list'].remove(t)
+                    added_ge_list.append(t)
                     request.session.modified = True
         if schedule.year_two_summer:
             for t in schedule.year_two_summer:
                 if t in request.session['user']['ge_list']:
                     request.session['user']['ge_list'].remove(t)
+                    added_ge_list.append(t)
                     request.session.modified = True
         if schedule.year_three_semester_one:
             for t in schedule.year_three_semester_one:
                 if t in request.session['user']['ge_list']:
                     request.session['user']['ge_list'].remove(t)
+                    added_ge_list.append(t)
                     request.session.modified = True
         if schedule.year_three_semester_two:
             for t in schedule.year_three_semester_two:
                 if t in request.session['user']['ge_list']:
                     request.session['user']['ge_list'].remove(t)
+                    added_ge_list.append(t)
                     request.session.modified = True
         if schedule.year_three_summer:
             for t in schedule.year_three_summer:
                 if t in request.session['user']['ge_list']:
                     request.session['user']['ge_list'].remove(t)
+                    added_ge_list.append(t)
                     request.session.modified = True
         if schedule.year_four_semester_one:
             for t in schedule.year_four_semester_one:
                 if t in request.session['user']['ge_list']:
                     request.session['user']['ge_list'].remove(t)
+                    added_ge_list.append(t)
                     request.session.modified = True
         if schedule.year_four_semester_two:
             for t in schedule.year_four_semester_two:
                 if t in request.session['user']['ge_list']:
                     request.session['user']['ge_list'].remove(t)
+                    added_ge_list.append(t)
                     request.session.modified = True
         if schedule.year_four_summer:
             for t in schedule.year_four_summer:
                 if t in request.session['user']['ge_list']:
                     request.session['user']['ge_list'].remove(t)
+                    added_ge_list.append(t)
+                    request.session.modified = True
+        
+        to_show_elective = []
+        not_show_elective = request.session['user']['elective_list']
+        added_elective = []
+        if specific_majors_data(comp_data, '380') in sc and specific_majors_data(comp_data, '322') in sc:
+            to_show_elective = request.session['user']['elective_list']
+            not_show_elective = []
+        for j in get_major_electives(comp_data):
+            if j in sc:
+                added_elective.append(j)
+        for x in to_show_elective:
+            if x in sc:
+                to_show_elective.remove(x)
+
+
+        content = {
+            'y1_s1': schedule.year_one_semester_one,
+            'y1_s2': schedule.year_one_semester_two,
+            'y1_summer': schedule.year_one_summer,
+            'y2_s1': schedule.year_two_semester_one,
+            'y2_s2': schedule.year_two_semester_two,
+            'y2_summer': schedule.year_two_summer,
+            'y3_s1': schedule.year_three_semester_one,
+            'y3_s2': schedule.year_three_semester_two,
+            'y3_summer': schedule.year_three_summer,
+            'y4_s1': schedule.year_four_semester_one,
+            'y4_s2': schedule.year_four_semester_two,
+            'y4_summer': schedule.year_four_summer,
+            'y': user.starting_year,
+            'to_show_list': to_show_list,
+            'current': current,
+            'to_show_elective': to_show_elective,
+            'not_show_elective': not_show_elective,
+            'added_elective': added_elective
+        }
+        return render(request, 'csun_calendar/schedule_semesters.html', content)
+    else:
+        messages.error(request, 'You must be logged in to view this page!')
+        return redirect(index)
+
+def schedule_semesters_from_fail_gpa(request):
+    if 'user' in request.session:
+        added_ge_list = []
+
+        user = User.objects.filter(id = request.session['user']['id']).first()
+        schedule = Schedule.objects.filter(user_id = user).first()
+        schedule.year_one_semester_one = get_dict(schedule.year_one_semester_one)
+        schedule.year_one_semester_two = get_dict(schedule.year_one_semester_two)
+        schedule.year_one_summer = get_dict(schedule.year_one_summer)
+        schedule.year_two_semester_one = get_dict(schedule.year_two_semester_one)
+        schedule.year_two_semester_two = get_dict(schedule.year_two_semester_two)
+        schedule.year_two_summer = get_dict(schedule.year_two_summer)
+        schedule.year_three_semester_one = get_dict(schedule.year_three_semester_one)
+        schedule.year_three_semester_two = get_dict(schedule.year_three_semester_two)
+        schedule.year_three_summer = get_dict(schedule.year_three_summer)
+        schedule.year_four_semester_one = get_dict(schedule.year_four_semester_one)
+        schedule.year_four_semester_two = get_dict(schedule.year_four_semester_two)
+        schedule.year_four_summer = get_dict(schedule.year_four_summer)
+
+        schedules = [schedule.year_one_semester_one, schedule.year_one_semester_two, schedule.year_one_summer, schedule.year_two_semester_one, schedule.year_two_semester_two, schedule.year_two_summer, schedule.year_three_semester_one, schedule.year_three_semester_two, schedule.year_three_summer, schedule.year_four_semester_one, schedule.year_four_semester_two, schedule.year_four_summer]
+        sc = []
+        for s in schedules:
+            for p in s:
+                sc.append(p)
+
+        if schedule.year_one_semester_one == [] and schedule.year_one_semester_two == []:    
+            current = schedule.year_one_semester_one
+            previous = schedule.year_one_semester_one
+        if schedule.year_one_semester_one != [] and schedule.year_one_semester_two == []:
+            current = schedule.year_one_semester_two
+        if schedule.year_one_semester_two != [] and schedule.year_two_semester_one == []:
+            current = schedule.year_two_semester_one
+            previous = schedule.year_one_semester_two
+        if schedule.year_two_semester_one != [] and schedule.year_two_semester_two == []:
+            current = schedule.year_two_semester_two
+            previous = schedule.year_two_semester_one
+        if schedule.year_two_semester_two != [] and schedule.year_three_semester_one == []:
+            current = schedule.year_three_semester_one
+            previous = schedule.year_two_semester_two 
+        if schedule.year_three_semester_one != [] and schedule.year_three_semester_two == []:
+            current = schedule.year_three_semester_two
+            previous = schedule.year_three_semester_one                                    
+        if schedule.year_three_semester_two != [] and schedule.year_four_semester_one == []:
+            current = schedule.year_four_semester_one
+            previous = schedule.year_three_semester_two 
+        if schedule.year_four_semester_one != [] and schedule.year_four_semester_two == []:
+            current = schedule.year_four_semester_two
+            previous = schedule.year_four_semester_one                         
+        if schedule.year_four_semester_two != []:
+            current = schedule.year_four_semester_two
+        # not_show_list = get_majors(comp_data, math_data)
+        request.session['user']['major_list'] = get_majors(comp_data, comp_sp_data, math_data)
+        request.session.modified = True
+        to_show_list = []
+        for m in request.session['user']['major_list']:
+            if m['subject'] == 'COMP':
+                if m['catalog_number'] == '108':
+                    if m not in (schedule.year_one_semester_one):
+                        to_show_list.append(m)
+                if m['catalog_number'] == '110' and m not in sc:
+                    print("here - 110")
+                    if (specific_majors_data(comp_data, '108') and specific_majors_data(math_data, '102')) in sc:
+                        to_show_list.append(m)
+                if m['catalog_number'] == '110L' and m not in sc:
+                    print("here - 110L")
+                    if (specific_majors_data(comp_data, '108') and specific_majors_data(math_data, '102')) in sc:
+                        to_show_list.append(m)                        
+                if m['catalog_number'] == '182' and m not in sc:
+                    if (specific_majors_data(comp_data, '110') and specific_majors_data(math_data, '105')) in sc:
+                        to_show_list.append(m)
+                if m['catalog_number'] == '182L' and m not in sc:
+                    if (specific_majors_data(comp_data, '110') and specific_majors_data(math_data, '105')) in sc:
+                        to_show_list.append(m)                      
+                if m['catalog_number'] == '122' and m not in sc:
+                    if (specific_majors_data(comp_data, '110') and specific_majors_data(math_data, '105')) in sc:
+                        to_show_list.append(m)
+                if m['catalog_number'] == '122L' and m not in sc:
+                    if (specific_majors_data(comp_data, '110') and specific_majors_data(math_data, '105')) in sc:
+                        to_show_list.append(m)                      
+                if m['catalog_number'] == '282' and m not in sc:
+                    if (specific_majors_data(comp_data, '182') and specific_majors_data(math_data, '150A')) in sc:
+                        to_show_list.append(m)
+                if m['catalog_number'] == '256' and m not in sc:
+                    if (specific_majors_data(comp_data, '182') and specific_majors_data(math_data, '150A')) in sc:
+                        to_show_list.append(m)
+                if m['catalog_number'] == '256L' and m not in sc:
+                    if (specific_majors_data(comp_data, '182') and specific_majors_data(math_data, '150A')) in sc:
+                        to_show_list.append(m)                        
+                if m['catalog_number'] == '222' and m not in sc:
+                    if (specific_majors_data(comp_data, '182') and specific_majors_data(comp_data, '122')) in sc:
+                        to_show_list.append(m)
+                if m['catalog_number'] == '380' and m not in sc:
+                    if specific_majors_data(comp_data, '282') in sc:
+                        to_show_list.append(m)
+                if m['catalog_number'] == '380L' and m not in sc:
+                    if specific_majors_data(comp_data, '282') in sc:
+                        to_show_list.append(m)                        
+                if m['catalog_number'] == '333' and m not in sc:
+                    if specific_majors_data(comp_data, '282') in sc:
+                        to_show_list.append(m)
+                if m['catalog_number'] == '310' and m not in sc:
+                    if specific_majors_data(comp_data, '256') in sc:
+                        to_show_list.append(m)
+                if m['catalog_number'] == '322' and m not in sc:
+                    if specific_majors_data(comp_data, '222') in sc:
+                        to_show_list.append(m)
+                if m['catalog_number'] == '322L' and m not in sc:
+                    if specific_majors_data(comp_data, '222') in sc:
+                        to_show_list.append(m)
+                if m['catalog_number'] == '482' and m not in sc:
+                    if specific_majors_data(math_data, '482') not in sc:
+                        if (specific_majors_data(comp_data, '282') and specific_majors_data(math_data, '262')) in sc:
+                            to_show_list.append(m)                         
+                if m['catalog_number'] == '490' and m not in sc:
+                    if specific_majors_data(comp_data, '380') in sc:
+                        to_show_list.append(m)
+                if m['catalog_number'] == '490L' and m not in sc:
+                    if specific_majors_data(comp_data, '380') in sc:
+                        to_show_list.append(m)                          
+                if m['catalog_number'] == '491' and m not in sc:
+                    if specific_majors_data(comp_data, '490') in sc:
+                        to_show_list.append(m)
+                if m['catalog_number'] == '491L' and m not in sc:
+                    if specific_majors_data(comp_data, '490') in sc:
+                        to_show_list.append(m)                      
+            elif m['subject'] == 'MATH':
+                if m['catalog_number'] == '102' and m not in sc:
+                    if m not in schedule.year_one_semester_one:
+                        to_show_list.append(m)
+                if m['catalog_number'] == '105' and m not in sc:
+                    if specific_majors_data(math_data, '102') in sc:
+                        to_show_list.append(m)
+                if m['catalog_number'] == '150A' and m not in sc:
+                    if specific_majors_data(math_data, '105') in sc:
+                        to_show_list.append(m)
+                if m['catalog_number'] == '150B' and m not in sc:
+                    if specific_majors_data(math_data, '150A') in sc:
+                        to_show_list.append(m)
+                if m['catalog_number'] == '262' and m not in sc:
+                    if specific_majors_data(math_data, '150B') in sc:
+                        to_show_list.append(m)
+                if m['catalog_number'] == '482' and m not in sc:
+                    if specific_majors_data(comp_data, '482') not in sc:
+                        if (specific_majors_data(math_data, '262') and specific_majors_data(comp_data, '282')) in sc:
+                            to_show_list.append(m)
+                if m['catalog_number'] == '340' and m not in sc:
+                    if specific_majors_data(math_data, '341') not in sc:
+                        if specific_majors_data(math_data, '150B') in sc:
+                            to_show_list.append(m)
+                if m['catalog_number'] == '341' and m not in sc:
+                    if specific_majors_data(math_data, '340') not in sc:
+                        if specific_majors_data(math_data, '150B') in sc:
+                            to_show_list.append(m)   
+        
+        for a in request.session['user']['major_list']:
+            if a not in to_show_list and a in sc:
+                request.session['user']['major_list'].remove(a)
+                request.session.modified = True 
+        for t in to_show_list:
+            if t in sc:
+                to_show_list.remove(t)                                                                 
+
+        if schedule.year_one_semester_one:
+            for t in schedule.year_one_semester_one:
+                if t in request.session['user']['ge_list']:
+                    request.session['user']['ge_list'].remove(t)
+                    added_ge_list.append(t)
+                    request.session.modified = True
+        if schedule.year_one_semester_two:
+            for t in schedule.year_one_semester_two:
+                if t in request.session['user']['ge_list']:
+                    request.session['user']['ge_list'].remove(t)
+                    added_ge_list.append(t)
+                    request.session.modified = True
+        if schedule.year_one_summer:
+            for t in schedule.year_one_summer:
+                if t in request.session['user']['ge_list']:
+                    request.session['user']['ge_list'].remove(t)
+                    added_ge_list.append(t)
+                    request.session.modified = True
+        if schedule.year_two_semester_one:
+            for t in schedule.year_two_semester_one:
+                if t in request.session['user']['ge_list']:
+                    request.session['user']['ge_list'].remove(t)
+                    added_ge_list.append(t)
+                    request.session.modified = True
+        if schedule.year_two_semester_two:
+            for t in schedule.year_two_semester_two:
+                if t in request.session['user']['ge_list']:
+                    request.session['user']['ge_list'].remove(t)
+                    added_ge_list.append(t)
+                    request.session.modified = True
+        if schedule.year_two_summer:
+            for t in schedule.year_two_summer:
+                if t in request.session['user']['ge_list']:
+                    request.session['user']['ge_list'].remove(t)
+                    added_ge_list.append(t)
+                    request.session.modified = True
+        if schedule.year_three_semester_one:
+            for t in schedule.year_three_semester_one:
+                if t in request.session['user']['ge_list']:
+                    request.session['user']['ge_list'].remove(t)
+                    added_ge_list.append(t)
+                    request.session.modified = True
+        if schedule.year_three_semester_two:
+            for t in schedule.year_three_semester_two:
+                if t in request.session['user']['ge_list']:
+                    request.session['user']['ge_list'].remove(t)
+                    added_ge_list.append(t)
+                    request.session.modified = True
+        if schedule.year_three_summer:
+            for t in schedule.year_three_summer:
+                if t in request.session['user']['ge_list']:
+                    request.session['user']['ge_list'].remove(t)
+                    added_ge_list.append(t)
+                    request.session.modified = True
+        if schedule.year_four_semester_one:
+            for t in schedule.year_four_semester_one:
+                if t in request.session['user']['ge_list']:
+                    request.session['user']['ge_list'].remove(t)
+                    added_ge_list.append(t)
+                    request.session.modified = True
+        if schedule.year_four_semester_two:
+            for t in schedule.year_four_semester_two:
+                if t in request.session['user']['ge_list']:
+                    request.session['user']['ge_list'].remove(t)
+                    added_ge_list.append(t)
+                    request.session.modified = True
+        if schedule.year_four_summer:
+            for t in schedule.year_four_summer:
+                if t in request.session['user']['ge_list']:
+                    request.session['user']['ge_list'].remove(t)
+                    added_ge_list.append(t)
                     request.session.modified = True
         
         to_show_elective = []

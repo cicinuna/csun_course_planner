@@ -25,8 +25,8 @@
                 <input class = "w3-btn w3-black" type = "submit" value = "Log Out">
             </form>            
 
-            <form style = "margin-top: 20px; margin-right: 10px; float: right; vertical-align: top" action = '/gpa'> 
-                <input class = "w3-btn w3-black" type = "submit" value = "GPA">
+            <form style = "margin-top: 20px; margin-right: 10px; float: right; vertical-align: top" action = '/redo_gpa'> 
+                <input class = "w3-btn w3-black" type = "submit" value = "Redo GPA">
             </form>
 
             <form style = "margin-top: 20px; margin-right: 10px; float: right; vertical-align: top" action = '/dashboard'> 
@@ -34,113 +34,292 @@
             </form>
         </header>
 
-        <div class = 'w3-container'>
-            <div class = 'w3-display-left w3-container' style = "border: 2px solid black; height: 380px; width: 380px; margin-top: 50px;">
-                <h3>{{y}} - Fall</h3>
-                {% for t in y1_s1 %}
-                    <ul>
-                        <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}}</p></li>
-                    </ul>
-                {% endfor %}
+        <h1>Your cumulative GPA is - <span class = 'w3-animate-opacity w3-btn w3-indigo' style = "border-radius: 15px;">{{cumulative_gpa|floatformat:2}}</span></h1>
+        <p>A+ = 4.0. A = 4.0. A- = 3.7. B+ = 3.3. B = 3.0. B- = 2.7. C+ = 2.3. C = 2.0. Anything below C just input a value less than 2.0</p>
+        <p>Enter the GPA values in decimal. Anything below C is no-pass, and you will be redirected to remake your schedule.</p>
+        <div class = 'w3-container' style = "margin-top: 150px;">
+            <div class = 'w3-display-left w3-container' style = "border: 2px solid black; height: 550px; width: 380px; margin-top: 200px;">
+                <form action = "process_gpa" method = 'POST'>
+                    {% csrf_token %}
+                    <h3>{{y}} - Fall</h3>
+                    {% if y1_s1_gpa == 0.0 %}
+                        <input type = "hidden" value = "y1_s1" name = "year">
+                        {% for t in y1_s1 %}
+                            <ul>
+                                <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}} Grade: <input type = "text" name = "gpa_values" style = "width: 25px;"></p></li>
+                            </ul>
+                        {% endfor %}
+                        <input type = "submit" class = "w3-btn w3-black" value = "submit" style = "float: right">
+                    {% else %}
+                        {% for t in y1_s1 %}
+                        <ul>
+                            <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}}</p></li>
+                        </ul>
+                        {% endfor %}
+                        <button style = "float:right" class = 'w3-btn w3-black w3-animate-opacity' value = "{{y1_s1_gpa}}">Semester GPA: {{y1_s1_gpa|floatformat:2}}</button>
+                    {% endif %}
+                </form>
             </div>
 
-            <div class = 'w3-display-middle w3-container' style = "border: 2px solid black; height: 380px; width: 380px; margin-top: 50px;">
-                <h3>{{y}} - Spring</h3>
-                {% for t in y1_s2 %}
-                    <ul>
-                        <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}}</p></li>
-                    </ul>
-                {% endfor %}
+            <div class = 'w3-display-middle w3-container' style = "border: 2px solid black; height: 550px; width: 380px; margin-top: 200px;">
+                <form action = "process_gpa" method = 'POST'>
+                    {% csrf_token %}
+                    <h3>{{y}} - Spring</h3>
+                    {% if y1_s2_gpa == 0.0 %}
+                        <input type = "hidden" value = "y1_s2" name = "year">
+                        {% for t in y1_s2 %}
+                            <ul>
+                                <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}} Grade: <input type = "text" name = "gpa_values" style = "width: 25px;"></p></li>
+                            </ul>
+                        {% endfor %}
+                        <input type = "submit" class = "w3-btn w3-black" value = "submit" style = "float: right">
+                    {% else %}
+                        {% for t in y1_s2 %}
+                        <ul>
+                            <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}}</p></li>
+                        </ul>
+                        {% endfor %}
+                        <button style = "float:right" class = 'w3-btn w3-black w3-animate-opacity' value = "{{y1_s2_gpa}}">Semester GPA: {{y1_s2_gpa|floatformat:2}}</button>
+                    {% endif %}
+                </form>
             </div>
 
-            <div class = 'w3-display-right w3-container' style = "border: 2px solid black; height: 380px; width: 380px; margin-top: 50px;">
-                <h3>{{y}} - Summer</h3>
-                {% for t in y1_summer %}
-                    <ul>
-                        <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}}</p></li>
-                    </ul>
-                {% endfor %}
+            <div class = 'w3-display-right w3-container' style = "border: 2px solid black; height: 550px; width: 380px; margin-top: 200px;">
+                <form action = "process_gpa" method = 'POST'>
+                    {% csrf_token %}
+                    <h3>{{y}} - Summer</h3>
+                    {% if y1_summer_gpa == 0.0 %}
+                        <input type = "hidden" value = "y1_summer" name = "year">
+                        {% for t in y1_summer %}
+                            <ul>
+                                <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}} Grade: <input type = "text" name = "gpa_values" style = "width: 25px;"></p></li>
+                            </ul>
+                        {% endfor %}
+                        {% if y1_summer|length != 0 %}
+                            <input type = "submit" class = "w3-btn w3-black" value = "submit" style = "float: right">
+                        {% endif %}
+                    {% else %}
+                        {% for t in y1_summer %}
+                        <ul>
+                            <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}}</p></li>
+                        </ul>
+                        {% endfor %}
+                        <button style = "float:right" class = 'w3-btn w3-black w3-animate-opacity' value = "{{y1_summer_gpa}}">Semester GPA: {{y1_summer|floatformat:2_gpa}}</button>
+                    {% endif %}
+                </form>
             </div>
 
-            <div class = 'w3-display-left w3-container' style = "border: 2px solid black; margin-top: 450px; height: 380px; width: 380px;">
-                <h3>{{y|add:"1"}} - Fall</h3>
-                {% for t in y2_s1 %}
-                    <ul>
-                        <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}}</p></li>
-                    </ul>
-                {% endfor %}
+            <div class = 'w3-display-left w3-container' style = "border: 2px solid black; margin-top: 800px; height: 550px; width: 380px;">
+                <form action = "process_gpa" method = 'POST'>
+                    {% csrf_token %}
+                    <h3>{{y|add:"1"}} - Fall</h3>
+                    {% if y2_s1_gpa == 0.0 %}
+                        <input type = "hidden" value = "y2_s1" name = "year">
+                        {% for t in y2_s1 %}
+                            <ul>
+                                <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}} Grade: <input type = "text" name = "gpa_values" style = "width: 25px;"></p></li>
+                            </ul>
+                        {% endfor %}
+                        <input type = "submit" class = "w3-btn w3-black" value = "submit" style = "float: right">
+                    {% else %}
+                        {% for t in y2_s1 %}
+                        <ul>
+                            <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}}</p></li>
+                        </ul>
+                        {% endfor %}
+                        <button style = "float:right" class = 'w3-btn w3-black w3-animate-opacity' value = "{{y2_s1_gpa}}">Semester GPA: {{y2_s1_gpa|floatformat:2}}</button>
+                    {% endif %}
+                </form>
             </div>
 
-            <div class = 'w3-display-middle w3-container' style = "border: 2px solid black; margin-top: 450px; height: 380px; width: 380px;">
-                <h3>{{y|add:"1"}} - Spring</h3>
-                {% for t in y2_s2 %}
-                    <ul>
-                        <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}}</p></li>
-                    </ul>
-                {% endfor %}
+            <div class = 'w3-display-middle w3-container' style = "border: 2px solid black; margin-top: 800px; height: 550px; width: 380px;">
+                <form action = "process_gpa" method = 'POST'>
+                    {% csrf_token %}
+                    <h3>{{y|add:"1"}} - Spring</h3>
+                    {% if y2_s2_gpa == 0.0 %}
+                        <input type = "hidden" value = "y2_s1" name = "year">
+                        {% for t in y2_s2 %}
+                            <ul>
+                                <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}} Grade: <input type = "text" name = "gpa_values" style = "width: 25px;"></p></li>
+                            </ul>
+                        {% endfor %}
+                        <input type = "submit" class = "w3-btn w3-black" value = "submit" style = "float: right">
+                    {% else %}
+                        {% for t in y2_s2 %}
+                        <ul>
+                            <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}}</p></li>
+                        </ul>
+                        {% endfor %}
+                        <button style = "float:right" class = 'w3-btn w3-black w3-animate-opacity' value = "{{y2_s2_gpa}}">Semester GPA: {{y2_s2_gpa|floatformat:2}}</button>
+                    {% endif %}
+                </form>
             </div>
 
-            <div class = 'w3-display-right w3-container' style = "border: 2px solid black; margin-top: 450px; height: 380px; width: 380px;">
-                <h3>{{y|add:"1"}} - Summer</h3>
-                {% for t in y2_summer %}
-                    <ul>
-                        <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}}</p></li>
-                    </ul>
-                {% endfor %}
+            <div class = 'w3-display-right w3-container' style = "border: 2px solid black; margin-top: 800px; height: 550px; width: 380px;">
+                <form action = "process_gpa" method = 'POST'>
+                    {% csrf_token %}
+                    <h3>{{y|add:"1"}} - Summer</h3>
+                    {% if y2_summer_gpa == 0.0 %}
+                        <input type = "hidden" value = "y2_summer" name = "year">
+                        {% for t in y2_summer %}
+                            <ul>
+                                <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}} Grade: <input type = "text" name = "gpa_values" style = "width: 25px;"></p></li>
+                            </ul>
+                        {% endfor %}
+                        {% if y2_summer|length != 0 %}
+                            <input type = "submit" class = "w3-btn w3-black" value = "submit" style = "float: right">
+                        {% endif %}
+                    {% else %}
+                        {% for t in y2_summer %}
+                        <ul>
+                            <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}}</p></li>
+                        </ul>
+                        {% endfor %}
+                        <button style = "float:right" class = 'w3-btn w3-black w3-animate-opacity' value = "{{y2_summer_gpa}}">Semester GPA: {{y2_summer|floatformat:2_gpa}}</button>
+                    {% endif %}
+                </form>
             </div>
 
-            <div class = 'w3-display-left w3-container' style = "border: 2px solid black; margin-top: 850px; height: 380px; width: 380px;">
-                <h3>{{y|add:"2"}} - Fall</h3>
-                {% for t in y3_s1 %}
-                    <ul>
-                        <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}}</p></li>
-                    </ul>
-                {% endfor %}
+            <div class = 'w3-display-left w3-container' style = "border: 2px solid black; margin-top: 1400px; height: 550px; width: 380px;">
+                <form action = "process_gpa" method = 'POST'>
+                    {% csrf_token %}
+                    <h3>{{y|add:"2"}} - Fall</h3>
+                    {% if y3_s1_gpa == 0.0 %}
+                        <input type = "hidden" value = "y3_s1" name = "year">
+                        {% for t in y3_s1 %}
+                            <ul>
+                                <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}} Grade: <input type = "text" name = "gpa_values" style = "width: 25px;"></p></li>
+                            </ul>
+                        {% endfor %}
+                        <input type = "submit" class = "w3-btn w3-black" value = "submit" style = "float: right">
+                    {% else %}
+                        {% for t in y3_s1 %}
+                        <ul>
+                            <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}}</p></li>
+                        </ul>
+                        {% endfor %}
+                        <button style = "float:right" class = 'w3-btn w3-black w3-animate-opacity' value = "{{y3_s1_gpa}}">Semester GPA: {{y3_s1_gpa|floatformat:2}}</button>
+                    {% endif %}
+                </form>
             </div>
 
-            <div class = 'w3-display-middle w3-container' style = "border: 2px solid black; margin-top: 850px; height: 380px; width: 380px;">
-                <h3>{{y|add:"2"}} - Spring</h3>
-                {% for t in y3_s2 %}
-                    <ul>
-                        <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}}</p></li>
-                    </ul>
-                {% endfor %}
+            <div class = 'w3-display-middle w3-container' style = "border: 2px solid black; margin-top: 1400px; height: 550px; width: 380px;">
+                <form action = "process_gpa" method = 'POST'>
+                    {% csrf_token %}
+                    <h3>{{y|add:"2"}} - Spring</h3>
+                    {% if y3_s2_gpa == 0.0 %}
+                        <input type = "hidden" value = "y3_s2" name = "year">
+                        {% for t in y3_s2 %}
+                            <ul>
+                                <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}} Grade: <input type = "text" name = "gpa_values" style = "width: 25px;"></p></li>
+                            </ul>
+                        {% endfor %}
+                        <input type = "submit" class = "w3-btn w3-black" value = "submit" style = "float: right">
+                    {% else %}
+                        {% for t in y3_s2 %}
+                        <ul>
+                            <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}}</p></li>
+                        </ul>
+                        {% endfor %}
+                        <button style = "float:right" class = 'w3-btn w3-black w3-animate-opacity' value = "{{y3_s2_gpa}}">Semester GPA: {{y3_s2_gpa|floatformat:2}}</button>
+                    {% endif %}
+                </form>
             </div>
 
-            <div class = 'w3-display-right w3-container' style = "border: 2px solid black; margin-top: 850px; height: 380px; width: 380px;">
-                <h3>{{y|add:"2"}} - Summer</h3>
-                {% for t in y3_summer %}
-                    <ul>
-                        <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}}</p></li>
-                    </ul>
-                {% endfor %}
+            <div class = 'w3-display-right w3-container' style = "border: 2px solid black; margin-top: 1400px; height: 550px; width: 380px;">
+                <form action = "process_gpa" method = 'POST'>
+                        {% csrf_token %}
+                        <h3>{{y|add:"2"}} - Summer</h3>
+                        {% if y3_summer_gpa == 0.0 %}
+                            <input type = "hidden" value = "y3_summer" name = "year">
+                            {% for t in y3_summer %}
+                                <ul>
+                                    <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}} Grade: <input type = "text" name = "gpa_values" style = "width: 25px;"></p></li>
+                                </ul>
+                            {% endfor %}
+                            {% if y3_summer|length != 0 %}
+                                <input type = "submit" class = "w3-btn w3-black" value = "submit" style = "float: right">
+                            {% endif %}
+                        {% else %}
+                            {% for t in y3_summer %}
+                            <ul>
+                                <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}}</p></li>
+                            </ul>
+                            {% endfor %}
+                            <button style = "float:right" class = 'w3-btn w3-black w3-animate-opacity' value = "{{y3_summer_gpa}}">Semester GPA: {{y3_summer|floatformat:2_gpa}}</button>
+                        {% endif %}
+                    </form>
             </div>
 
-            <div class = 'w3-display-left w3-container' style = "border: 2px solid black; margin-top: 1250px; height: 380px; width: 380px;">
-                <h3>{{y|add:"3"}} - Fall</h3>
-                {% for t in y4_s1 %}
-                    <ul>
-                        <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}}</p></li>
-                    </ul>
-                {% endfor %}
+            <div class = 'w3-display-left w3-container' style = "border: 2px solid black; margin-top: 2000px; height: 550px; width: 380px;">
+                <form action = "process_gpa" method = 'POST'>
+                    {% csrf_token %}
+                    <h3>{{y|add:"3"}} - Fall</h3>
+                    {% if y4_s1_gpa == 0.0 %}
+                        <input type = "hidden" value = "y4_s1" name = "year">
+                        {% for t in y4_s1 %}
+                            <ul>
+                                <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}} Grade: <input type = "text" name = "gpa_values" style = "width: 25px;"></p></li>
+                            </ul>
+                        {% endfor %}
+                        <input type = "submit" class = "w3-btn w3-black" value = "submit" style = "float: right">
+                    {% else %}
+                        {% for t in y4_s1 %}
+                        <ul>
+                            <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}}</p></li>
+                        </ul>
+                        {% endfor %}
+                        <button style = "float:right" class = 'w3-btn w3-black w3-animate-opacity' value = "{{y4_s1_gpa}}">Semester GPA: {{y4_s1_gpa|floatformat:2}}</button>
+                    {% endif %}
+                </form>
             </div>
 
-            <div class = 'w3-display-middle w3-container' style = "border: 2px solid black; margin-top: 1250px; height: 380px; width: 380px;">
-                <h3>{{y|add:"3"}} - Spring</h3>
-                {% for t in y4_s2 %}
-                    <ul>
-                        <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}}</p></li>
-                    </ul>
-                {% endfor %}
+            <div class = 'w3-display-middle w3-container' style = "border: 2px solid black; margin-top: 2000px; height: 550px; width: 380px;">
+                <form action = "process_gpa" method = 'POST'>
+                    {% csrf_token %}
+                    <h3>{{y|add:"4"}} - Spring</h3>
+                    {% if y4_s2_gpa == 0.0 %}
+                        <input type = "hidden" value = "y4_s2" name = "year">
+                        {% for t in y4_s2 %}
+                            <ul>
+                                <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}} Grade: <input type = "text" name = "gpa_values" style = "width: 25px;"></p></li>
+                            </ul>
+                        {% endfor %}
+                        <input type = "submit" class = "w3-btn w3-black" value = "submit" style = "float: right">
+                    {% else %}
+                        {% for t in y4_s2 %}
+                        <ul>
+                            <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}}</p></li>
+                        </ul>
+                        {% endfor %}
+                        <button style = "float:right" class = 'w3-btn w3-black w3-animate-opacity' value = "{{y4_s2_gpa}}">Semester GPA: {{y4_s2_gpa|floatformat:2}}</button>
+                    {% endif %}
+                </form>
             </div>
 
-            <div class = 'w3-display-right w3-container' style = "border: 2px solid black; margin-top: 1250px; height: 380px; width: 380px;">
-                <h3>{{y|add:"3"}} - Summer</h3>
-                {% for t in y4_summer %}
-                    <ul>
-                        <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}}</p></li>
-                    </ul>
-                {% endfor %}
+            <div class = 'w3-display-right w3-container' style = "border: 2px solid black; margin-top: 2000px; height: 550px; width: 380px;">
+                <form action = "process_gpa" method = 'POST'>
+                    {% csrf_token %}
+                    <h3>{{y|add:"3"}} - Summer</h3>
+                    {% if y4_summer_gpa == 0.0 %}
+                        <input type = "hidden" value = "y4_summer" name = "year">
+                        {% for t in y4_summer %}
+                            <ul>
+                                <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}} Grade: <input type = "text" name = "gpa_values" style = "width: 25px;"></p></li>
+                            </ul>
+                        {% endfor %}
+                        {% if y4_summer|length != 0 %}
+                            <input type = "submit" class = "w3-btn w3-black" value = "submit" style = "float: right">
+                        {% endif %}
+                    {% else %}
+                        {% for t in y4_summer %}
+                        <ul>
+                            <li><p>{{t.subject}} {{t.catalog_number}} - {{t.title}}</p></li>
+                        </ul>
+                        {% endfor %}
+                        <button style = "float:right" class = 'w3-btn w3-black w3-animate-opacity' value = "{{y4_summer_gpa}}">Semester GPA: {{y4_summer|floatformat:2_gpa}}</button>
+                    {% endif %}
+                </form>
             </div>
         </div>
         <script>
