@@ -147,7 +147,9 @@
         <script> 
             $(document).ready(function() {
                 $('#confirm_create').click(function() {
-                    return confirm('You already have a schedule. Doing this will wipe everything out and you would have to start over to create a new 4 year schedule...');
+                    if({{y4_s2}} == []) {
+                        return confirm('You already have a schedule. Doing this will wipe everything out and you would have to start over to create a new 4 year schedule...');
+                    }
                 });
             });
         </script>
